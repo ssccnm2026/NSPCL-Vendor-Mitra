@@ -2,6 +2,7 @@
 /* ==========================================================
    NSPCL VENDOR MITRA
    Connected FAQ Chatbot
+   File: script.js
    FAQ data is maintained in faq.js
    ========================================================== */
 
@@ -9,13 +10,13 @@
 
 const CHAT_STORAGE_KEY = "nspclVendorMitraChat_v2";
 
-let chatMessages;
-let chatForm;
-let chatInput;
-let sendButton;
-let clearChatButton;
-let quickQuestionsContainer;
-let faqListContainer;
+let chatMessages = null;
+let chatForm = null;
+let chatInput = null;
+let sendButton = null;
+let clearChatButton = null;
+let quickQuestionsContainer = null;
+let faqListContainer = null;
 let isReplying = false;
 
 /* -------------------- FAQ DATA -------------------- */
@@ -53,6 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
     return;
   }
 
+  /* Submit a chat message */
   if (chatForm) {
     chatForm.addEventListener("submit", function (event) {
       event.preventDefault();
@@ -63,6 +65,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  /* Clear chat history */
   if (clearChatButton) {
     clearChatButton.addEventListener("click", clearChat);
   }
@@ -70,6 +73,26 @@ document.addEventListener("DOMContentLoaded", function () {
   renderQuickQuestions();
   renderFAQs();
   restoreChatHistory();
+
+  /* Show a welcome message if there is no saved conversation */
+  if (chatMessages.children.length === 0) {
+    addMessage(
+      "Hello! 👋 Welcome to NSPCL Vendor Mitra.\n\n" +
+      "I can help with vendor registration, tenders, EMD, GeM, " +
+      "purchase orders, invoices, payment enquiries and delivery requirements.\n\n" +
+      "How can I help you today?",
+      "bot"
+    );
+
+    saveMessage(
+      "Hello! 👋 Welcome to NSPCL Vendor Mitra.\n\n" +
+      "I can help with vendor registration, tenders, EMD, GeM, " +
+      "purchase orders, invoices, payment enquiries and delivery requirements.\n\n" +
+      "How can I help you today?",
+      "bot"
+    );
+  }
+
   scrollChatToBottom();
 });
 
@@ -87,6 +110,7 @@ function sendMessage(message) {
   }
 
   if (!chatMessages) {
+    console.error("Chat messages container is missing.");
     return;
   }
 
@@ -125,11 +149,28 @@ function sendMessage(message) {
   }, 400);
 }
 
-/* Make functions available to HTML buttons if needed. */
+/* Make functions available to index.html */
 window.sendMessage = sendMessage;
+
 window.vmAsk = function (question) {
+  /* Open the popup when a suggested question is selected */
+  const chatbotSection = document.getElementById("chatbot");
+
+  if (chatbotSection) {
+    chatbotSection.classList.add("vm-chat-open");
+  }
+
+  const launcher = document.getElementById("chatLauncher");
+
+  if (launcher) {
+    launcher.setAttribute("aria-expanded", "true");
+    launcher.setAttribute("aria-label", "Close Vendor Mitra chat");
+    launcher.textContent = "✕";
+  }
+
   sendMessage(question);
 };
+
 window.vmClearChat = clearChat;
 
 /* -------------------- FIND ANSWERS -------------------- */
@@ -149,15 +190,17 @@ function getBotResponse(question) {
     return "Please enter a question so I can help.";
   }
 
-  if (/^(hi|hello|hey|namaste)$/.test(query)) {
+  /* Greetings */
+  if (/^(hi|hello|hey|namaste|good morning|good afternoon|good evening)$/.test(query)) {
     return (
       "Hello! Welcome to NSPCL Vendor Mitra. 👋\n\n" +
       "I can help with vendor registration, tenders, EMD, GeM, " +
-      "purchase orders, invoices, payment enquiries, and delivery requirements.\n\n" +
+      "purchase orders, invoices, payment enquiries and delivery requirements.\n\n" +
       "What would you like to know?"
     );
   }
 
+  /* Thank-you messages */
   if (
     query.includes("thank you") ||
     query === "thanks" ||
@@ -166,6 +209,7 @@ function getBotResponse(question) {
     return "You're welcome! Feel free to ask another vendor-related question.";
   }
 
+  /* Chatbot identity */
   if (
     query.includes("who are you") ||
     query.includes("what can you do") ||
@@ -173,23 +217,81 @@ function getBotResponse(question) {
   ) {
     return (
       "I am NSPCL Vendor Mitra, a rule-based vendor-support FAQ chatbot. " +
-      "I answer common questions using the FAQ database maintained in faq.js."
+      "I answer common questions using the FAQ database maintained in faq.js. " +
+      "I do not access live SAP, tender, invoice or payment records."
     );
   }
 
+  /* Human support */
   if (
     query.includes("human") ||
     query.includes("real person") ||
-    query.includes("speak to someone")
+    query.includes("speak to someone") ||
+    query.includes("contact person")
   ) {
     return (
       "For assistance from an NSPCL representative, please use the " +
-      "official contact details in the applicable tender, purchase order, " +
+      "official contact details in the applicable tender, purchase order " +
       "or official NSPCL website."
     );
   }
 
+  /* Live status enquiries */
+  if (
+    query.includes("live status") ||
+    query.includes("payment status") ||
+    query.includes("invoice status") ||
+    query.includes("tender status") ||
+    query.includes("po status") ||
+    query.includes("purchase order status")
+  ) {
+    const faqs = getFAQs();
+    const matchedFAQ = findBestFAQ(query, faqs);
+
+    if (matchedFAQ && matchedFAQ.score >= 5) {
+      return (
+        matchedFAQ.faq.answer +
+        "\n\nPlease note: Vendor Mitra cannot retrieve live status. " +
+        "Verify the latest status through the relevant official portal " +
+        "or authorised NSPCL contact."
+      );
+    }
+
+    return (
+      "Vendor Mitra cannot access live payment, invoice, purchase order " +
+      "or tender records.\n\n" +
+      "Please check the relevant official portal or contact the authorised " +
+      "NSPCL representative mentioned in your tender or purchase order."
+    );
+  }
+
+  /* Search the FAQ database */
   const faqs = getFAQs();
+  const matchedFAQ = findBestFAQ(query, faqs);
+
+  if (matchedFAQ && matchedFAQ.score >= 3) {
+    return matchedFAQ.faq.answer;
+  }
+
+  return (
+    "I couldn't find a sufficiently relevant answer in my FAQ database.\n\n" +
+    "Try asking about:\n" +
+    "• Vendor registration\n" +
+    "• Tenders and bid submission\n" +
+    "• EMD or performance security\n" +
+    "• GeM or MSME\n" +
+    "• Purchase orders and delivery\n" +
+    "• Invoices and payment enquiries\n\n" +
+    "For an official decision or live status, please contact the " +
+    "authorised NSPCL representative or relevant portal helpdesk."
+  );
+}
+
+window.vmGetBotResponse = getBotResponse;
+
+/* -------------------- FAQ MATCHING -------------------- */
+
+function findBestFAQ(query, faqs) {
   let bestMatch = null;
   let bestScore = 0;
 
@@ -210,6 +312,10 @@ function getBotResponse(question) {
 
     if (faqQuestion && query.includes(faqQuestion)) {
       score += 20;
+    }
+
+    if (faqQuestion && faqQuestion.includes(query)) {
+      score += 10;
     }
 
     if (faqCategory && query.includes(faqCategory)) {
@@ -242,25 +348,15 @@ function getBotResponse(question) {
     }
   });
 
-  if (bestMatch && bestScore >= 3) {
-    return bestMatch.answer;
+  if (!bestMatch) {
+    return null;
   }
 
-  return (
-    "I couldn't find a sufficiently relevant answer in my FAQ database.\n\n" +
-    "Try asking about:\n" +
-    "• Vendor registration\n" +
-    "• Tenders and bid submission\n" +
-    "• EMD or performance security\n" +
-    "• GeM or MSME\n" +
-    "• Purchase orders and delivery\n" +
-    "• Invoices and payment enquiries\n\n" +
-    "For an official decision or live status, please contact the " +
-    "authorised NSPCL representative or relevant portal helpdesk."
-  );
+  return {
+    faq: bestMatch,
+    score: bestScore
+  };
 }
-
-window.vmGetBotResponse = getBotResponse;
 
 /* -------------------- DISPLAY MESSAGES -------------------- */
 
@@ -278,6 +374,8 @@ function addMessage(text, sender) {
 
   const bubble = document.createElement("div");
   bubble.className = "message-bubble";
+
+  /* textContent avoids interpreting user messages as HTML */
   bubble.textContent = String(text || "");
 
   const timestamp = document.createElement("div");
@@ -329,7 +427,7 @@ function removeTypingIndicator() {
   }
 }
 
-/* -------------------- SAVE AND RESTORE CHAT -------------------- */
+/* -------------------- SAVE CHAT HISTORY -------------------- */
 
 function saveMessage(text, sender) {
   try {
@@ -351,6 +449,8 @@ function saveMessage(text, sender) {
     console.warn("Unable to save chat history.", error);
   }
 }
+
+/* -------------------- RESTORE CHAT HISTORY -------------------- */
 
 function restoreChatHistory() {
   if (!chatMessages) {
@@ -382,29 +482,35 @@ function restoreChatHistory() {
   }
 }
 
+/* -------------------- CLEAR CHAT -------------------- */
+
 function clearChat() {
   if (!chatMessages) {
     chatMessages = document.getElementById("chatMessages");
   }
 
-  if (chatMessages) {
-    chatMessages.replaceChildren();
-
-    addMessage(
-      "Hello! 👋 Welcome to NSPCL Vendor Mitra.\n\n" +
-      "Ask me about vendor registration, tenders, EMD, GeM, " +
-      "purchase orders, invoices, or delivery requirements.",
-      "bot"
-    );
+  if (!chatMessages) {
+    return;
   }
+
+  chatMessages.replaceChildren();
+
+  const welcomeMessage =
+    "Hello! 👋 Welcome to NSPCL Vendor Mitra.\n\n" +
+    "Ask me about vendor registration, tenders, EMD, GeM, " +
+    "purchase orders, invoices or delivery requirements.";
+
+  addMessage(welcomeMessage, "bot");
 
   try {
     sessionStorage.removeItem(CHAT_STORAGE_KEY);
+    saveMessage(welcomeMessage, "bot");
   } catch (error) {
     console.warn("Unable to clear chat history.", error);
   }
 
   isReplying = false;
+  removeTypingIndicator();
 
   if (sendButton) {
     sendButton.disabled = false;
@@ -439,6 +545,21 @@ function renderQuickQuestions() {
     button.textContent = faq.question;
 
     button.addEventListener("click", function () {
+      /* Open the chat popup before sending the question */
+      const chatbotSection = document.getElementById("chatbot");
+
+      if (chatbotSection) {
+        chatbotSection.classList.add("vm-chat-open");
+      }
+
+      const launcher = document.getElementById("chatLauncher");
+
+      if (launcher) {
+        launcher.setAttribute("aria-expanded", "true");
+        launcher.setAttribute("aria-label", "Close Vendor Mitra chat");
+        launcher.textContent = "✕";
+      }
+
       sendMessage(faq.question);
     });
 
@@ -461,6 +582,7 @@ function renderFAQs() {
 
   if (faqs.length === 0) {
     const notice = document.createElement("p");
+
     notice.textContent =
       "FAQs could not be loaded. Please check faq.js and refresh the page.";
 
