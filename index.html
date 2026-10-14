@@ -5,28 +5,423 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>NSPCL Vendor Mitra | Vendor Support Portal</title>
+    <title>NSPCL Vendor Mitra | Vendor Support Assistant</title>
 
-    <meta name="description"
-          content="NSPCL Vendor Mitra - A vendor support chatbot providing guidance on vendor registration, tenders, GeM, purchase orders, invoices and payments.">
+    <meta name="description" content="NSPCL Vendor Mitra helps vendors find guidance on registration, tenders, GeM, purchase orders, invoices and payments.">
 
-    <meta name="theme-color" content="#073b66">
+    <meta name="theme-color" content="#103b68">
 
-    <!-- Website stylesheet -->
-    <link rel="stylesheet" href="style.css">
+    <!-- Connect the stylesheet -->
+    <link rel="stylesheet" href="./style.css">
 
-    <!-- Chatbot JavaScript -->
-    <script src="script.js" defer></script>
+    <!-- Load chatbot functionality -->
+    <script src="./script.js" defer></script>
+
+    <!-- Small additional styles to ensure the chat is visible -->
+    <style>
+        .vm-chat-shell {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 290px;
+            gap: 24px;
+            align-items: start;
+        }
+
+        .vm-chat-panel {
+            display: block;
+            min-width: 0;
+            overflow: hidden;
+            background: #ffffff;
+            border: 1px solid #dce5ef;
+            border-radius: 18px;
+            box-shadow: 0 12px 35px rgba(16, 59, 104, 0.10);
+        }
+
+        .vm-chat-top {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            padding: 20px;
+            color: #ffffff;
+            background: linear-gradient(115deg, #092849, #14517b);
+        }
+
+        .vm-chat-top h3 {
+            margin: 0;
+            color: #ffffff;
+            font-size: 17px;
+        }
+
+        .vm-chat-top p {
+            margin: 4px 0 0;
+            color: #dce8f5;
+            font-size: 12px;
+        }
+
+        .vm-chat-symbol {
+            display: grid;
+            place-items: center;
+            width: 48px;
+            height: 48px;
+            flex-shrink: 0;
+            border-radius: 14px;
+            background: rgba(255,255,255,.15);
+            font-size: 25px;
+        }
+
+        .vm-chat-status {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            margin-right: 5px;
+            border-radius: 50%;
+            background: #6ee7a8;
+        }
+
+        .vm-chat-clear {
+            margin-left: auto;
+            padding: 8px 11px;
+            border: 1px solid rgba(255,255,255,.35);
+            border-radius: 8px;
+            background: transparent;
+            color: #ffffff;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .vm-chat-clear:hover {
+            background: rgba(255,255,255,.12);
+        }
+
+        #chatMessages {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            height: 380px;
+            overflow-y: auto;
+            padding: 22px;
+            background: #f8fafc;
+            scroll-behavior: smooth;
+        }
+
+        #chatMessages:empty::before {
+            content: "Welcome to NSPCL Vendor Mitra! Type your question below to get started.";
+            display: block;
+            padding: 16px;
+            border: 1px solid #dce5ef;
+            border-radius: 12px;
+            background: #ffffff;
+            color: #334155;
+            line-height: 1.8;
+        }
+
+        .vm-welcome-message {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .vm-welcome-icon {
+            display: grid;
+            place-items: center;
+            width: 34px;
+            height: 34px;
+            flex-shrink: 0;
+            border-radius: 10px;
+            background: #eaf2fb;
+        }
+
+        .vm-welcome-bubble {
+            padding: 13px 15px;
+            border: 1px solid #dce5ef;
+            border-radius: 4px 14px 14px 14px;
+            background: #ffffff;
+            color: #243449;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .vm-quick-area {
+            padding: 18px 20px;
+            border-top: 1px solid #e2e8f0;
+            background: #ffffff;
+        }
+
+        .vm-quick-area h4 {
+            margin: 0 0 12px;
+            color: #103b68;
+            font-size: 13px;
+        }
+
+        #quickQuestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 9px;
+        }
+
+        #quickQuestions button,
+        #quickQuestions .quick-question {
+            padding: 9px 12px;
+            border: 1px solid #d7e3ef;
+            border-radius: 22px;
+            background: #f8fbff;
+            color: #34516e;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        #quickQuestions button:hover,
+        #quickQuestions .quick-question:hover {
+            border-color: #087e8b;
+            background: #e9f7f8;
+        }
+
+        #chatForm {
+            display: flex;
+            gap: 10px;
+            padding: 16px 20px;
+            border-top: 1px solid #e2e8f0;
+            background: #ffffff;
+        }
+
+        #chatInput {
+            flex: 1;
+            width: 100%;
+            min-width: 0;
+            height: 48px;
+            padding: 0 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            background: #ffffff;
+            color: #243449;
+            font-size: 14px;
+        }
+
+        #chatInput:focus {
+            outline: 2px solid rgba(8,126,139,.22);
+            border-color: #087e8b;
+        }
+
+        #sendButton {
+            min-width: 85px;
+            padding: 0 17px;
+            border: none;
+            border-radius: 10px;
+            background: #103b68;
+            color: #ffffff;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        #sendButton:hover {
+            background: #092849;
+        }
+
+        .vm-chat-note {
+            margin: 0;
+            padding: 0 20px 17px;
+            background: #ffffff;
+            color: #64748b;
+            font-size: 11px;
+            line-height: 1.7;
+        }
+
+        .vm-help-card {
+            padding: 22px;
+            margin-bottom: 16px;
+            border: 1px solid #dce5ef;
+            border-radius: 15px;
+            background: #ffffff;
+            box-shadow: 0 4px 15px rgba(16,59,104,.04);
+        }
+
+        .vm-help-card h3 {
+            margin: 0 0 12px;
+            color: #103b68;
+            font-size: 16px;
+        }
+
+        .vm-help-card p,
+        .vm-help-card li {
+            color: #64748b;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .vm-help-card ol {
+            padding-left: 20px;
+        }
+
+        .vm-help-card li {
+            margin-bottom: 8px;
+        }
+
+        .vm-topic-button {
+            display: block;
+            width: 100%;
+            padding: 10px 0;
+            border: 0;
+            border-bottom: 1px solid #edf1f5;
+            background: transparent;
+            color: #34516e;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .vm-topic-button:hover {
+            color: #087e8b;
+        }
+
+        .vm-links-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .vm-official-link {
+            display: block;
+            padding: 22px;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            background: #ffffff;
+            box-shadow: 0 4px 14px rgba(16,59,104,.04);
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+
+        .vm-official-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(16,59,104,.09);
+        }
+
+        .vm-official-link strong {
+            display: block;
+            margin-bottom: 6px;
+            color: #103b68;
+        }
+
+        .vm-official-link span {
+            color: #64748b;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .vm-fallback-faq {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .vm-fallback-faq details {
+            margin-bottom: 12px;
+            padding: 17px 20px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            background: #ffffff;
+        }
+
+        .vm-fallback-faq summary {
+            color: #103b68;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .vm-fallback-faq p {
+            margin-top: 12px;
+            color: #64748b;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .vm-fallback-faq a {
+            color: #087e8b;
+            text-decoration: underline;
+        }
+
+        .vm-footer {
+            padding: 36px 0 20px;
+            background: #092849;
+            color: #dce8f5;
+        }
+
+        .vm-footer h2 {
+            margin-bottom: 8px;
+            color: #ffffff;
+            font-size: 20px;
+        }
+
+        .vm-footer p {
+            font-size: 12px;
+            line-height: 1.8;
+        }
+
+        .vm-footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 24px;
+            padding-top: 17px;
+            border-top: 1px solid rgba(255,255,255,.15);
+        }
+
+        @media (max-width: 850px) {
+            .vm-chat-shell {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            #chatMessages {
+                height: 340px;
+                padding: 14px;
+            }
+
+            .vm-chat-top {
+                gap: 9px;
+                padding: 14px;
+            }
+
+            .vm-chat-top h3 {
+                font-size: 14px;
+            }
+
+            .vm-chat-symbol {
+                width: 40px;
+                height: 40px;
+            }
+
+            .vm-chat-clear {
+                padding: 7px;
+                font-size: 11px;
+            }
+
+            #chatForm {
+                padding: 12px;
+                gap: 7px;
+            }
+
+            #chatInput {
+                font-size: 13px;
+            }
+
+            #sendButton {
+                min-width: 68px;
+                padding: 0 10px;
+            }
+
+            .vm-links-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-    <!-- ================= HEADER ================= -->
+    <!-- HEADER -->
     <header class="header" id="home">
         <div class="container header-container">
 
-            <a href="#home" class="brand" aria-label="NSPCL Vendor Mitra Home">
-                <div class="brand-logo">N</div>
+            <a href="#home" class="brand">
+                <div class="brand-logo" aria-hidden="true">N</div>
                 <div class="brand-text">
                     <h1>NSPCL Vendor Mitra</h1>
                     <p>Vendor Support Portal</p>
@@ -45,39 +440,43 @@
     </header>
 
 
-    <!-- ================= WELCOME BANNER ================= -->
     <main>
 
+        <!-- HERO -->
         <section class="welcome-banner">
             <div class="container welcome-content">
 
                 <div class="welcome-text">
-                    <span class="welcome-label">YOUR DIGITAL VENDOR ASSISTANT</span>
+                    <span class="welcome-label">
+                        YOUR DIGITAL VENDOR ASSISTANT
+                    </span>
 
-                    <h2>Welcome to <span>NSPCL Vendor Mitra</span></h2>
+                    <h2>
+                        Welcome to <span>NSPCL Vendor Mitra</span>
+                    </h2>
 
                     <p>
-                        Your one-stop digital assistant for vendor-related
-                        information and guidance on registration, tenders,
-                        GeM, purchase orders, invoices and payments.
+                        Your digital guide to vendor registration, tender
+                        participation, GeM, purchase orders, invoice
+                        submission and other vendor-related queries.
                     </p>
 
                     <div class="welcome-buttons">
                         <a href="#chatbot" class="btn btn-primary">
-                            Ask Vendor Mitra
+                            Ask Vendor Mitra →
                         </a>
 
                         <a href="#faqs" class="btn btn-secondary">
-                            Browse FAQs
+                            Explore FAQs
                         </a>
                     </div>
                 </div>
 
-                <div class="welcome-visual" aria-hidden="true">
-                    <div class="assistant-icon">🤝</div>
+                <div class="welcome-visual" aria-label="Vendor support">
+                    <div class="assistant-icon" aria-hidden="true">🤝</div>
                     <div class="visual-caption">
-                        <strong>Vendor Mitra</strong>
-                        <span>Here to guide you</span>
+                        <strong>Your Vendor Assistant</strong>
+                        <span>Information. Guidance. Support.</span>
                     </div>
                 </div>
 
@@ -85,16 +484,15 @@
         </section>
 
 
-        <!-- ================= SERVICES ================= -->
+        <!-- SERVICES -->
         <section class="services-section" id="services">
             <div class="container">
 
                 <div class="section-heading">
-                    <span class="section-label">HOW CAN WE HELP?</span>
-                    <h2>Vendor Support Services</h2>
+                    <span class="section-label">OUR SERVICES</span>
+                    <h2>How Can We Help You?</h2>
                     <p>
-                        Select a topic to get started with the information
-                        you need.
+                        Select a category to ask Vendor Mitra a question.
                     </p>
                 </div>
 
@@ -103,12 +501,12 @@
                     <button
                         type="button"
                         class="service-card"
-                        onclick="sendMessage('How can I register as an NSPCL vendor?')">
+                        onclick="window.vmAsk('How can I register as an NSPCL vendor?')">
 
                         <div class="service-icon">👤</div>
                         <h3>Vendor Registration</h3>
                         <p>
-                            Learn about vendor registration and profile
+                            Understand vendor registration and profile
                             requirements.
                         </p>
                         <span class="card-link">Get guidance →</span>
@@ -117,13 +515,13 @@
                     <button
                         type="button"
                         class="service-card"
-                        onclick="sendMessage('How can I find and participate in NSPCL tenders?')">
+                        onclick="window.vmAsk('How can I find and participate in NSPCL tenders?')">
 
                         <div class="service-icon">📋</div>
                         <h3>Tenders & Bidding</h3>
                         <p>
-                            Get guidance on tender documents, bid submission
-                            and corrigenda.
+                            Learn about tender notices, bid submission,
+                            EMD and tender conditions.
                         </p>
                         <span class="card-link">Get guidance →</span>
                     </button>
@@ -131,13 +529,13 @@
                     <button
                         type="button"
                         class="service-card"
-                        onclick="sendMessage('How can I check the invoice and payment process?')">
+                        onclick="window.vmAsk('What is the invoice submission and payment process?')">
 
                         <div class="service-icon">💳</div>
-                        <h3>Purchase Orders & Payments</h3>
+                        <h3>Orders & Payments</h3>
                         <p>
-                            Understand purchase orders, invoice submission
-                            and payment procedures.
+                            Get general guidance on purchase orders,
+                            invoices and payments.
                         </p>
                         <span class="card-link">Get guidance →</span>
                     </button>
@@ -147,7 +545,7 @@
         </section>
 
 
-        <!-- ================= CHATBOT ================= -->
+        <!-- CHATBOT -->
         <section class="chatbot-section" id="chatbot">
             <div class="container">
 
@@ -155,98 +553,103 @@
                     <span class="section-label">INSTANT GUIDANCE</span>
                     <h2>Ask Vendor Mitra</h2>
                     <p>
-                        Type your question or select one of the suggested
-                        questions below.
+                        Have a vendor-related question? Type it below or
+                        select a suggested question.
                     </p>
                 </div>
 
-                <div class="chat-layout">
+                <div class="vm-chat-shell">
 
-                    <!-- CHAT WINDOW -->
-                    <div class="chat-card">
+                    <!-- MAIN CHAT PANEL -->
+                    <div class="vm-chat-panel">
 
-                        <div class="chat-header">
-                            <div class="chat-avatar">🤝</div>
+                        <div class="vm-chat-top">
+                            <div class="vm-chat-symbol" aria-hidden="true">
+                                🤝
+                            </div>
 
-                            <div class="chat-header-text">
+                            <div>
                                 <h3>NSPCL Vendor Mitra</h3>
                                 <p>
-                                    <span class="status-dot"></span>
-                                    Digital FAQ Assistant
+                                    <span class="vm-chat-status"></span>
+                                    FAQ Support Assistant
                                 </p>
                             </div>
 
                             <button
                                 type="button"
                                 id="clearChat"
-                                class="clear-chat"
-                                aria-label="Clear conversation"
-                                title="Clear conversation">
+                                class="vm-chat-clear">
                                 Clear Chat
                             </button>
                         </div>
 
 
-                        <!-- Messages are inserted here by script.js -->
+                        <!-- The JavaScript chatbot uses this exact ID -->
                         <div
-                            class="chat-messages"
                             id="chatMessages"
+                            class="chat-messages"
                             role="log"
                             aria-live="polite"
                             aria-label="Chat conversation">
 
-                            <div class="message bot-message">
-                                <div class="message-avatar">🤝</div>
-                                <div class="message-content">
-                                    <p>
-                                        Hello! Welcome to NSPCL Vendor Mitra.
-                                        I can guide you on vendor registration,
-                                        tenders, GeM, purchase orders, invoices
-                                        and other vendor-related FAQs.
-                                    </p>
-                                    <p>
-                                        How may I assist you today?
-                                    </p>
+                            <!-- Visible even before JavaScript starts -->
+                            <div class="vm-welcome-message">
+                                <div class="vm-welcome-icon">🤝</div>
+                                <div class="vm-welcome-bubble">
+                                    <strong>Hello! Welcome to Vendor Mitra.</strong>
+                                    <br>
+                                    I can help with general questions about
+                                    vendor registration, tenders, GeM, EMD,
+                                    purchase orders and invoices.
+                                    <br><br>
+                                    What would you like to know today?
                                 </div>
                             </div>
 
                         </div>
 
 
-                        <!-- SUGGESTED QUESTIONS -->
-                        <div class="quick-questions">
-                            <h4>Suggested Questions</h4>
+                        <!-- QUICK QUESTIONS -->
+                        <div class="vm-quick-area">
+                            <h4>Frequently Asked Questions</h4>
 
-                            <div
-                                class="quick-question-list"
-                                id="quickQuestions">
+                            <!-- script.js may populate this element -->
+                            <div id="quickQuestions">
 
                                 <button
                                     type="button"
                                     class="quick-question"
-                                    onclick="sendMessage('How do I register as a vendor?')">
-                                    How do I register as a vendor?
+                                    onclick="window.vmAsk('How do I register as a vendor?')">
+                                    Vendor registration
                                 </button>
 
                                 <button
                                     type="button"
                                     class="quick-question"
-                                    onclick="sendMessage('Where can I find NSPCL tenders?')">
-                                    Where can I find NSPCL tenders?
+                                    onclick="window.vmAsk('Where can I find NSPCL tenders?')">
+                                    Find tenders
                                 </button>
 
                                 <button
                                     type="button"
                                     class="quick-question"
-                                    onclick="sendMessage('What is EMD in a tender?')">
-                                    What is EMD?
+                                    onclick="window.vmAsk('What is EMD?')">
+                                    EMD
                                 </button>
 
                                 <button
                                     type="button"
                                     class="quick-question"
-                                    onclick="sendMessage('What documents are required for invoice submission?')">
-                                    Invoice submission documents
+                                    onclick="window.vmAsk('What documents are required for invoice submission?')">
+                                    Invoice submission
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="quick-question"
+                                    onclick="window.vmAsk('How can I update my vendor profile?')">
+                                    Update vendor details
                                 </button>
 
                             </div>
@@ -254,112 +657,106 @@
 
 
                         <!-- MESSAGE INPUT -->
-                        <form class="chat-input-form" id="chatForm">
+                        <form id="chatForm" class="chat-input-form">
 
                             <label for="chatInput" class="visually-hidden">
-                                Enter your vendor support question
+                                Type your question
                             </label>
 
                             <input
                                 type="text"
                                 id="chatInput"
                                 class="chat-input"
-                                placeholder="Type your question here..."
-                                autocomplete="off"
+                                placeholder="Type your vendor-related question..."
                                 maxlength="1000"
+                                autocomplete="off"
                                 required>
 
                             <button
                                 type="submit"
                                 id="sendButton"
                                 class="send-button">
-                                Send
-                                <span aria-hidden="true">➤</span>
+                                Send ➤
                             </button>
 
                         </form>
 
-                        <p class="chat-disclaimer">
-                            Vendor Mitra provides general guidance based on
-                            its FAQ knowledge base. Please verify important
-                            information against official NSPCL tender
-                            documents and instructions.
+                        <p class="vm-chat-note">
+                            This assistant provides general FAQ-based
+                            information. Please verify deadlines, eligibility,
+                            payment status and other important details against
+                            official tender documents or the concerned NSPCL
+                            department.
                         </p>
 
                     </div>
 
 
-                    <!-- CHAT SIDEBAR -->
-                    <aside class="sidebar">
+                    <!-- RIGHT SIDEBAR -->
+                    <aside>
 
-                        <div class="sidebar-card">
-                            <div class="sidebar-icon">💡</div>
-                            <h3>How to Use Vendor Mitra</h3>
-
+                        <div class="vm-help-card">
+                            <h3>💡 How to Use Vendor Mitra</h3>
                             <ol>
-                                <li>Type your question in the chat box.</li>
-                                <li>Select a suggested question for quick help.</li>
-                                <li>Review the response and follow official links.</li>
+                                <li>Enter a question in the chat box.</li>
+                                <li>Click Send or press Enter.</li>
+                                <li>Review the answer and official links.</li>
                             </ol>
                         </div>
 
-                        <div class="sidebar-card">
-                            <div class="sidebar-icon">🔎</div>
-                            <h3>Popular Topics</h3>
+                        <div class="vm-help-card">
+                            <h3>🔎 Popular Topics</h3>
 
-                            <ul class="topic-list">
-                                <li>
-                                    <button
-                                        type="button"
-                                        onclick="sendMessage('Tell me about vendor registration')">
-                                        Vendor registration
-                                    </button>
-                                </li>
-                                <li>
-                                    <button
-                                        type="button"
-                                        onclick="sendMessage('Explain the tender bidding process')">
-                                        Tender bidding
-                                    </button>
-                                </li>
-                                <li>
-                                    <button
-                                        type="button"
-                                        onclick="sendMessage('Explain EMD and performance security')">
-                                        EMD and performance security
-                                    </button>
-                                </li>
-                                <li>
-                                    <button
-                                        type="button"
-                                        onclick="sendMessage('How do I submit an invoice to NSPCL?')">
-                                        Invoice submission
-                                    </button>
-                                </li>
-                                <li>
-                                    <button
-                                        type="button"
-                                        onclick="sendMessage('How can I update my vendor profile?')">
-                                        Vendor profile updates
-                                    </button>
-                                </li>
-                            </ul>
+                            <button
+                                type="button"
+                                class="vm-topic-button"
+                                onclick="window.vmAsk('How do I participate in an e-tender?')">
+                                › E-tender participation
+                            </button>
+
+                            <button
+                                type="button"
+                                class="vm-topic-button"
+                                onclick="window.vmAsk('Explain EMD and performance security')">
+                                › EMD and performance security
+                            </button>
+
+                            <button
+                                type="button"
+                                class="vm-topic-button"
+                                onclick="window.vmAsk('What documents are needed for invoice submission?')">
+                                › Invoice documentation
+                            </button>
+
+                            <button
+                                type="button"
+                                class="vm-topic-button"
+                                onclick="window.vmAsk('How can I request a delivery extension?')">
+                                › Delivery extension
+                            </button>
+
+                            <button
+                                type="button"
+                                class="vm-topic-button"
+                                onclick="window.vmAsk('How can I update vendor details?')">
+                                › Vendor profile updates
+                            </button>
                         </div>
 
-                        <div class="sidebar-card help-card">
-                            <div class="sidebar-icon">🌐</div>
-                            <h3>Need Official Information?</h3>
+                        <div class="vm-help-card">
+                            <h3>🌐 Official NSPCL Website</h3>
                             <p>
-                                Refer to the official portals for authoritative
-                                instructions and the latest updates.
+                                Consult the official website for company
+                                information, notices and available resources.
                             </p>
-
-                            <a
-                                href="https://www.nspcl.co.in/"
-                                target="_blank"
-                                rel="noopener noreferrer">
-                                Visit NSPCL Website →
-                            </a>
+                            <p style="margin-top:12px;">
+                                <a
+                                    href="https://www.nspcl.co.in/"
+                                    target="_blank"
+                                    rel="noopener noreferrer">
+                                    Visit NSPCL →
+                                </a>
+                            </p>
                         </div>
 
                     </aside>
@@ -369,7 +766,7 @@
         </section>
 
 
-        <!-- ================= FAQ SECTION ================= -->
+        <!-- FAQ SECTION -->
         <section class="faq-section" id="faqs">
             <div class="container">
 
@@ -377,115 +774,87 @@
                     <span class="section-label">QUICK REFERENCE</span>
                     <h2>Frequently Asked Questions</h2>
                     <p>
-                        Explore common vendor queries or ask Vendor Mitra
-                        for guidance.
+                        Browse general answers to common vendor questions.
                     </p>
                 </div>
 
-                <!-- FAQs are populated by script.js -->
-                <div class="faq-list" id="faqList">
+                <!-- script.js may populate this container -->
+                <div id="faqList" class="faq-list vm-fallback-faq">
 
-                    <details class="faq-item">
-                        <summary class="faq-question">
-                            How can I find NSPCL tender opportunities?
+                    <details>
+                        <summary>
+                            Where can I find NSPCL tender opportunities?
                         </summary>
-                        <div class="faq-answer">
-                            <p>
-                                Visit the official NSPCL website and the
-                                Central Public Procurement Portal. Review
-                                each tender notice for eligibility,
-                                deadlines and submission requirements.
-                            </p>
-                            <p>
-                                <a
-                                    href="https://www.nspcl.co.in/"
-                                    target="_blank"
-                                    rel="noopener noreferrer">
-                                    NSPCL Website
-                                </a>
-                                |
-                                <a
-                                    href="https://eprocure.gov.in/eprocure/app"
-                                    target="_blank"
-                                    rel="noopener noreferrer">
-                                    Central Public Procurement Portal
-                                </a>
-                            </p>
-                        </div>
+                        <p>
+                            Check the official NSPCL website and the Central
+                            Public Procurement Portal. Always read the
+                            individual tender notice for its deadlines,
+                            eligibility requirements and submission process.
+                        </p>
+                        <p>
+                            <a href="https://www.nspcl.co.in/"
+                               target="_blank"
+                               rel="noopener noreferrer">NSPCL Website</a>
+                            |
+                            <a href="https://eprocure.gov.in/eprocure/app"
+                               target="_blank"
+                               rel="noopener noreferrer">CPPP Portal</a>
+                        </p>
                     </details>
 
-                    <details class="faq-item">
-                        <summary class="faq-question">
-                            What should I check before submitting a bid?
-                        </summary>
-                        <div class="faq-answer">
-                            <p>
-                                Read the complete tender document, verify
-                                eligibility and technical requirements,
-                                prepare the requested documents, and submit
-                                your bid before the deadline specified in
-                                the tender.
-                            </p>
-                        </div>
+                    <details>
+                        <summary>What is EMD in a tender?</summary>
+                        <p>
+                            EMD stands for Earnest Money Deposit. Whether it
+                            is required, its amount, and any exemptions depend
+                            on the specific tender conditions and applicable
+                            procurement rules.
+                        </p>
                     </details>
 
-                    <details class="faq-item">
-                        <summary class="faq-question">
-                            What is EMD?
-                        </summary>
-                        <div class="faq-answer">
-                            <p>
-                                EMD stands for Earnest Money Deposit. It may
-                                be required as part of a tender, subject to
-                                the tender conditions and any applicable
-                                exemptions.
-                            </p>
-                        </div>
+                    <details>
+                        <summary>Where can I access GeM?</summary>
+                        <p>
+                            Use the official Government e-Marketplace website
+                            for seller registration, catalogue information
+                            and procurement-related services.
+                        </p>
+                        <p>
+                            <a href="https://gem.gov.in/"
+                               target="_blank"
+                               rel="noopener noreferrer">Visit GeM</a>
+                        </p>
                     </details>
 
-                    <details class="faq-item">
-                        <summary class="faq-question">
-                            Where can I find GeM information?
-                        </summary>
-                        <div class="faq-answer">
-                            <p>
-                                Visit the Government e-Marketplace portal
-                                for official information about seller
-                                registration, products, services and
-                                procurement.
-                            </p>
-                            <p>
-                                <a
-                                    href="https://gem.gov.in/"
-                                    target="_blank"
-                                    rel="noopener noreferrer">
-                                    Visit GeM
-                                </a>
-                            </p>
-                        </div>
+                    <details>
+                        <summary>How can I update my vendor details?</summary>
+                        <p>
+                            Follow the applicable portal instructions for
+                            updating vendor details. For NSPCL-specific
+                            changes, consult the relevant instructions or
+                            contact the designated NSPCL department.
+                        </p>
                     </details>
 
-                    <details class="faq-item">
-                        <summary class="faq-question">
-                            How can I update my vendor details?
-                        </summary>
-                        <div class="faq-answer">
-                            <p>
-                                Follow the applicable vendor registration
-                                or procurement portal procedure. For
-                                NSPCL-specific changes, refer to the
-                                relevant instructions or contact the
-                                designated NSPCL department.
-                            </p>
-                        </div>
+                    <details>
+                        <summary>How do I submit an invoice?</summary>
+                        <p>
+                            Follow the purchase order, contract terms and
+                            invoice submission instructions applicable to
+                            your order. Confirm the required supporting
+                            documents and submission channel with the
+                            concerned NSPCL department.
+                        </p>
                     </details>
 
                 </div>
 
-                <div class="faq-more">
-                    <p>Could not find your answer?</p>
+                <div class="faq-more" style="text-align:center; margin-top:30px;">
+                    <p style="margin-bottom:14px;">
+                        Need help with another question?
+                    </p>
                     <a href="#chatbot" class="btn btn-primary">
-                        Ask Vendor Mitra
+                        Ask Vendor Mitra →
                     </a>
                 </div>
 
@@ -493,7 +862,7 @@
         </section>
 
 
-        <!-- ================= USEFUL LINKS ================= -->
+        <!-- USEFUL LINKS -->
         <section class="useful-links-section" id="useful-links">
             <div class="container">
 
@@ -501,67 +870,47 @@
                     <span class="section-label">OFFICIAL RESOURCES</span>
                     <h2>Useful Links for Vendors</h2>
                     <p>
-                        Access the official websites for additional
+                        Access the official portals for additional
                         information and services.
                     </p>
                 </div>
 
-                <div class="useful-links-grid">
+                <div class="vm-links-grid">
 
                     <a
+                        class="vm-official-link"
                         href="https://www.nspcl.co.in/"
                         target="_blank"
-                        rel="noopener noreferrer"
-                        class="useful-link-card">
-
-                        <div class="link-icon">🏢</div>
-                        <div>
-                            <h3>NSPCL Official Website</h3>
-                            <p>Company information and official updates.</p>
-                        </div>
-                        <span aria-hidden="true">↗</span>
+                        rel="noopener noreferrer">
+                        <strong>🏢 NSPCL Official Website ↗</strong>
+                        <span>Company information and official updates.</span>
                     </a>
 
                     <a
+                        class="vm-official-link"
                         href="https://eprocure.gov.in/eprocure/app"
                         target="_blank"
-                        rel="noopener noreferrer"
-                        class="useful-link-card">
-
-                        <div class="link-icon">📑</div>
-                        <div>
-                            <h3>Central Public Procurement Portal</h3>
-                            <p>Government tender notices and e-procurement.</p>
-                        </div>
-                        <span aria-hidden="true">↗</span>
+                        rel="noopener noreferrer">
+                        <strong>📋 Central Public Procurement Portal ↗</strong>
+                        <span>Government tender notices and e-procurement.</span>
                     </a>
 
                     <a
+                        class="vm-official-link"
                         href="https://gem.gov.in/"
                         target="_blank"
-                        rel="noopener noreferrer"
-                        class="useful-link-card">
-
-                        <div class="link-icon">🛒</div>
-                        <div>
-                            <h3>Government e-Marketplace</h3>
-                            <p>Government procurement marketplace.</p>
-                        </div>
-                        <span aria-hidden="true">↗</span>
+                        rel="noopener noreferrer">
+                        <strong>🛒 Government e-Marketplace ↗</strong>
+                        <span>Government procurement marketplace.</span>
                     </a>
 
                     <a
+                        class="vm-official-link"
                         href="https://udyamregistration.gov.in/"
                         target="_blank"
-                        rel="noopener noreferrer"
-                        class="useful-link-card">
-
-                        <div class="link-icon">📄</div>
-                        <div>
-                            <h3>Udyam Registration</h3>
-                            <p>Official MSME registration information.</p>
-                        </div>
-                        <span aria-hidden="true">↗</span>
+                        rel="noopener noreferrer">
+                        <strong>📄 Udyam Registration ↗</strong>
+                        <span>Official MSME registration information.</span>
                     </a>
 
                 </div>
@@ -572,85 +921,102 @@
     </main>
 
 
-    <!-- ================= FOOTER ================= -->
-    <footer class="footer">
-        <div class="container footer-container">
+    <!-- FOOTER -->
+    <footer class="vm-footer">
+        <div class="container">
 
-            <div class="footer-brand">
-                <h2>NSPCL Vendor Mitra</h2>
-                <p>
-                    Simplifying vendor support through digital guidance.
-                </p>
-            </div>
+            <h2>NSPCL Vendor Mitra</h2>
+            <p>
+                A digital FAQ assistant designed to make vendor information
+                easier to access.
+            </p>
 
-            <div class="footer-links">
-                <a href="#home">Home</a>
-                <a href="#services">Services</a>
-                <a href="#chatbot">Ask Mitra</a>
-                <a href="#faqs">FAQs</a>
-            </div>
+            <p style="margin-top:14px;">
+                This website is an informational support tool. It does not
+                access live vendor records, SAP, tender status or payment
+                status, and it does not replace official NSPCL instructions.
+            </p>
 
-            <div class="footer-note">
-                <p>
-                    This is an informational FAQ assistant and is not an
-                    official transaction-processing system. Responses do
-                    not replace the applicable tender conditions or
-                    instructions issued by NSPCL.
-                </p>
-            </div>
-
-            <div class="footer-bottom">
+            <div class="vm-footer-bottom">
                 <p>
                     &copy; <span id="currentYear">2026</span>
-                    NSPCL Vendor Mitra. All rights reserved.
+                    NSPCL Vendor Mitra
                 </p>
-                <p>Designed for vendor information and assistance.</p>
+                <p>Vendor information and digital assistance</p>
             </div>
 
         </div>
     </footer>
 
 
-    <!-- ================= SMALL PAGE SCRIPT ================= -->
+    <!-- COMPATIBILITY HELPERS -->
     <script>
-        // Automatically update the copyright year.
         document.getElementById("currentYear").textContent =
             new Date().getFullYear();
 
-        // Highlight the active navigation link while scrolling.
+        /*
+         * Connects all topic buttons to the chatbot.
+         * The existing script.js should define sendMessage().
+         */
+        window.vmAsk = function (question) {
+            if (typeof window.sendMessage === "function") {
+                window.sendMessage(question);
+                document.getElementById("chatbot").scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+                return;
+            }
+
+            const input = document.getElementById("chatInput");
+            const form = document.getElementById("chatForm");
+
+            input.value = question;
+            document.getElementById("chatbot").scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+            if (form.requestSubmit) {
+                form.requestSubmit();
+            } else {
+                form.dispatchEvent(
+                    new Event("submit", {
+                        bubbles: true,
+                        cancelable: true
+                    })
+                );
+            }
+        };
+
+        /*
+         * Highlight the active navigation item.
+         */
         document.addEventListener("DOMContentLoaded", function () {
+            const navLinks = document.querySelectorAll(".nav-link");
             const sections = document.querySelectorAll(
-                "main section[id], main section"
+                "main section[id]"
             );
 
-            const navLinks = document.querySelectorAll(".nav-link");
-
-            function updateActiveLink() {
-                let currentSection = "home";
+            function updateNavigation() {
+                let activeId = "home";
 
                 sections.forEach(function (section) {
-                    if (!section.id) return;
-
-                    const sectionTop =
-                        section.getBoundingClientRect().top;
-
-                    if (sectionTop <= 150) {
-                        currentSection = section.id;
+                    if (section.getBoundingClientRect().top <= 150) {
+                        activeId = section.id;
                     }
                 });
 
                 navLinks.forEach(function (link) {
-                    const target = link.getAttribute("href");
-
                     link.classList.toggle(
                         "active",
-                        target === "#" + currentSection
+                        link.getAttribute("href") === "#" + activeId
                     );
                 });
             }
 
-            window.addEventListener("scroll", updateActiveLink);
-            updateActiveLink();
+            window.addEventListener("scroll", updateNavigation);
+            updateNavigation();
         });
     </script>
 
