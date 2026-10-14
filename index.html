@@ -1,1 +1,226 @@
 
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#123653">
+  <meta name="description" content="NSPCL Vendor Mitra - vendor support FAQ chatbot demo">
+  <title>NSPCL Vendor Mitra | Vendor Support</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="brand-mark" aria-hidden="true">N</div>
+
+    <div class="brand-copy">
+      <div class="eyebrow">
+        NTPC-SAIL Power Company Limited
+      </div>
+
+      <h1>NSPCL <span>Vendor Mitra</span></h1>
+
+      <p>Vendor Support Assistant</p>
+    </div>
+
+    <div class="header-status">
+      <span class="status-dot"></span>
+      FAQ Assistant
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="page-layout">
+
+    <!-- Introduction and Quick Topics -->
+    <section class="intro">
+
+      <p class="kicker">VENDOR HELP DESK</p>
+
+      <h2>How can we help you today?</h2>
+
+      <p>
+        Find general guidance on tenders, purchase orders,
+        invoices, GeM and vendor registration.
+      </p>
+
+      <div class="notice">
+        <strong>Demo notice:</strong>
+        This public demonstration provides general guidance only.
+        It is not connected to SAP, GeM, payment records or live
+        tender systems. Always refer to the applicable tender/PO
+        and official NSPCL communication.
+      </div>
+
+      <div class="topic-grid" aria-label="Suggested topics">
+
+        <button class="topic-card"
+          data-question="What documents should I check before submitting a tender bid?">
+
+          <span class="topic-icon">▤</span>
+          <strong>Tender &amp; bids</strong>
+          <small>Documents and submission</small>
+
+        </button>
+
+        <button class="topic-card"
+          data-question="How should I check my purchase order terms and delivery period?">
+
+          <span class="topic-icon">▣</span>
+          <strong>Purchase orders</strong>
+          <small>PO terms and delivery</small>
+
+        </button>
+
+        <button class="topic-card"
+          data-question="What should I check before submitting an invoice?">
+
+          <span class="topic-icon">₹</span>
+          <strong>Invoice guidance</strong>
+          <small>Invoice checklist</small>
+
+        </button>
+
+        <button class="topic-card"
+          data-question="How can I find vendor registration requirements?">
+
+          <span class="topic-icon">✓</span>
+          <strong>Vendor registration</strong>
+          <small>Process and documents</small>
+
+        </button>
+
+      </div>
+    </section>
+
+    <!-- Chatbot Panel -->
+    <section class="chat-panel" aria-label="Vendor Mitra chat">
+
+      <!-- Chat Header -->
+      <div class="chat-heading">
+
+        <div class="bot-avatar" aria-hidden="true">VM</div>
+
+        <div>
+          <h2>Chat with Vendor Mitra</h2>
+          <p>
+            <span class="status-dot"></span>
+            Ready to help
+          </p>
+        </div>
+
+        <button
+          id="clear-chat"
+          class="clear-button"
+          type="button"
+          title="Clear conversation">
+
+          Clear
+
+        </button>
+      </div>
+
+      <!-- Conversation Messages -->
+      <div
+        id="chat-log"
+        class="chat-log"
+        role="log"
+        aria-live="polite"
+        aria-relevant="additions">
+
+        <div class="message bot-message">
+
+          <div class="message-label">Vendor Mitra</div>
+
+          <p>
+            Namaste! Welcome to NSPCL Vendor Mitra.
+            Select a topic or type your question below.
+            I can answer general FAQs and point you to
+            the documents you should check.
+          </p>
+
+          <div class="message-time">
+            General guidance
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Suggested Questions -->
+      <div class="quick-prompts">
+
+        <span>Common questions</span>
+
+        <button
+          data-question="How do I submit a tender bid?">
+          Tender bid
+        </button>
+
+        <button
+          data-question="How can I check my purchase order terms and delivery period?">
+          PO terms
+        </button>
+
+        <button
+          data-question="How do I ask about an invoice or payment?">
+          Invoice/payment
+        </button>
+
+      </div>
+
+      <!-- User Input -->
+      <form id="chat-form" class="composer">
+
+        <label class="visually-hidden" for="user-input">
+          Type your question
+        </label>
+
+        <input
+          id="user-input"
+          name="question"
+          autocomplete="off"
+          placeholder="Type your vendor query…"
+          maxlength="500"
+          required>
+
+        <button type="submit" aria-label="Send message">
+          Send <span aria-hidden="true">➤</span>
+        </button>
+
+      </form>
+
+      <!-- Privacy Notice -->
+      <p class="privacy-note">
+        Please do not enter passwords, bank details, personal data
+        or confidential tender information.
+      </p>
+
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+
+    <span>
+      NSPCL Vendor Mitra · Basic FAQ Demo
+    </span>
+
+    <span>
+      For official decisions, follow the applicable tender
+      and purchase order.
+    </span>
+
+  </footer>
+
+  <!-- JavaScript Files -->
+  <script src="faq.js"></script>
+  <script src="script.js"></script>
+
+</body>
+</html>
+
