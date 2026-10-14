@@ -1,226 +1,659 @@
-
-<!doctype html>
+```html
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#123653">
-  <meta name="description" content="NSPCL Vendor Mitra - vendor support FAQ chatbot demo">
-  <title>NSPCL Vendor Mitra | Vendor Support</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>NSPCL Vendor Mitra | Vendor Support Portal</title>
+
+    <meta name="description"
+          content="NSPCL Vendor Mitra - A vendor support chatbot providing guidance on vendor registration, tenders, GeM, purchase orders, invoices and payments.">
+
+    <meta name="theme-color" content="#073b66">
+
+    <!-- Website stylesheet -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Chatbot JavaScript -->
+    <script src="script.js" defer></script>
 </head>
 
 <body>
 
-  <!-- Header -->
-  <header class="site-header">
-    <div class="brand-mark" aria-hidden="true">N</div>
+    <!-- ================= HEADER ================= -->
+    <header class="header" id="home">
+        <div class="container header-container">
 
-    <div class="brand-copy">
-      <div class="eyebrow">
-        NTPC-SAIL Power Company Limited
-      </div>
+            <a href="#home" class="brand" aria-label="NSPCL Vendor Mitra Home">
+                <div class="brand-logo">N</div>
+                <div class="brand-text">
+                    <h1>NSPCL Vendor Mitra</h1>
+                    <p>Vendor Support Portal</p>
+                </div>
+            </a>
 
-      <h1>NSPCL <span>Vendor Mitra</span></h1>
-
-      <p>Vendor Support Assistant</p>
-    </div>
-
-    <div class="header-status">
-      <span class="status-dot"></span>
-      FAQ Assistant
-    </div>
-  </header>
-
-  <!-- Main Content -->
-  <main class="page-layout">
-
-    <!-- Introduction and Quick Topics -->
-    <section class="intro">
-
-      <p class="kicker">VENDOR HELP DESK</p>
-
-      <h2>How can we help you today?</h2>
-
-      <p>
-        Find general guidance on tenders, purchase orders,
-        invoices, GeM and vendor registration.
-      </p>
-
-      <div class="notice">
-        <strong>Demo notice:</strong>
-        This public demonstration provides general guidance only.
-        It is not connected to SAP, GeM, payment records or live
-        tender systems. Always refer to the applicable tender/PO
-        and official NSPCL communication.
-      </div>
-
-      <div class="topic-grid" aria-label="Suggested topics">
-
-        <button class="topic-card"
-          data-question="What documents should I check before submitting a tender bid?">
-
-          <span class="topic-icon">▤</span>
-          <strong>Tender &amp; bids</strong>
-          <small>Documents and submission</small>
-
-        </button>
-
-        <button class="topic-card"
-          data-question="How should I check my purchase order terms and delivery period?">
-
-          <span class="topic-icon">▣</span>
-          <strong>Purchase orders</strong>
-          <small>PO terms and delivery</small>
-
-        </button>
-
-        <button class="topic-card"
-          data-question="What should I check before submitting an invoice?">
-
-          <span class="topic-icon">₹</span>
-          <strong>Invoice guidance</strong>
-          <small>Invoice checklist</small>
-
-        </button>
-
-        <button class="topic-card"
-          data-question="How can I find vendor registration requirements?">
-
-          <span class="topic-icon">✓</span>
-          <strong>Vendor registration</strong>
-          <small>Process and documents</small>
-
-        </button>
-
-      </div>
-    </section>
-
-    <!-- Chatbot Panel -->
-    <section class="chat-panel" aria-label="Vendor Mitra chat">
-
-      <!-- Chat Header -->
-      <div class="chat-heading">
-
-        <div class="bot-avatar" aria-hidden="true">VM</div>
-
-        <div>
-          <h2>Chat with Vendor Mitra</h2>
-          <p>
-            <span class="status-dot"></span>
-            Ready to help
-          </p>
-        </div>
-
-        <button
-          id="clear-chat"
-          class="clear-button"
-          type="button"
-          title="Clear conversation">
-
-          Clear
-
-        </button>
-      </div>
-
-      <!-- Conversation Messages -->
-      <div
-        id="chat-log"
-        class="chat-log"
-        role="log"
-        aria-live="polite"
-        aria-relevant="additions">
-
-        <div class="message bot-message">
-
-          <div class="message-label">Vendor Mitra</div>
-
-          <p>
-            Namaste! Welcome to NSPCL Vendor Mitra.
-            Select a topic or type your question below.
-            I can answer general FAQs and point you to
-            the documents you should check.
-          </p>
-
-          <div class="message-time">
-            General guidance
-          </div>
+            <nav class="navbar" aria-label="Main navigation">
+                <a href="#home" class="nav-link active">Home</a>
+                <a href="#services" class="nav-link">Services</a>
+                <a href="#chatbot" class="nav-link">Ask Mitra</a>
+                <a href="#faqs" class="nav-link">FAQs</a>
+                <a href="#useful-links" class="nav-link">Useful Links</a>
+            </nav>
 
         </div>
+    </header>
 
-      </div>
 
-      <!-- Suggested Questions -->
-      <div class="quick-prompts">
+    <!-- ================= WELCOME BANNER ================= -->
+    <main>
 
-        <span>Common questions</span>
+        <section class="welcome-banner">
+            <div class="container welcome-content">
 
-        <button
-          data-question="How do I submit a tender bid?">
-          Tender bid
-        </button>
+                <div class="welcome-text">
+                    <span class="welcome-label">YOUR DIGITAL VENDOR ASSISTANT</span>
 
-        <button
-          data-question="How can I check my purchase order terms and delivery period?">
-          PO terms
-        </button>
+                    <h2>Welcome to <span>NSPCL Vendor Mitra</span></h2>
 
-        <button
-          data-question="How do I ask about an invoice or payment?">
-          Invoice/payment
-        </button>
+                    <p>
+                        Your one-stop digital assistant for vendor-related
+                        information and guidance on registration, tenders,
+                        GeM, purchase orders, invoices and payments.
+                    </p>
 
-      </div>
+                    <div class="welcome-buttons">
+                        <a href="#chatbot" class="btn btn-primary">
+                            Ask Vendor Mitra
+                        </a>
 
-      <!-- User Input -->
-      <form id="chat-form" class="composer">
+                        <a href="#faqs" class="btn btn-secondary">
+                            Browse FAQs
+                        </a>
+                    </div>
+                </div>
 
-        <label class="visually-hidden" for="user-input">
-          Type your question
-        </label>
+                <div class="welcome-visual" aria-hidden="true">
+                    <div class="assistant-icon">🤝</div>
+                    <div class="visual-caption">
+                        <strong>Vendor Mitra</strong>
+                        <span>Here to guide you</span>
+                    </div>
+                </div>
 
-        <input
-          id="user-input"
-          name="question"
-          autocomplete="off"
-          placeholder="Type your vendor query…"
-          maxlength="500"
-          required>
+            </div>
+        </section>
 
-        <button type="submit" aria-label="Send message">
-          Send <span aria-hidden="true">➤</span>
-        </button>
 
-      </form>
+        <!-- ================= SERVICES ================= -->
+        <section class="services-section" id="services">
+            <div class="container">
 
-      <!-- Privacy Notice -->
-      <p class="privacy-note">
-        Please do not enter passwords, bank details, personal data
-        or confidential tender information.
-      </p>
+                <div class="section-heading">
+                    <span class="section-label">HOW CAN WE HELP?</span>
+                    <h2>Vendor Support Services</h2>
+                    <p>
+                        Select a topic to get started with the information
+                        you need.
+                    </p>
+                </div>
 
-    </section>
+                <div class="card-grid">
 
-  </main>
+                    <button
+                        type="button"
+                        class="service-card"
+                        onclick="sendMessage('How can I register as an NSPCL vendor?')">
 
-  <!-- Footer -->
-  <footer>
+                        <div class="service-icon">👤</div>
+                        <h3>Vendor Registration</h3>
+                        <p>
+                            Learn about vendor registration and profile
+                            requirements.
+                        </p>
+                        <span class="card-link">Get guidance →</span>
+                    </button>
 
-    <span>
-      NSPCL Vendor Mitra · Basic FAQ Demo
-    </span>
+                    <button
+                        type="button"
+                        class="service-card"
+                        onclick="sendMessage('How can I find and participate in NSPCL tenders?')">
 
-    <span>
-      For official decisions, follow the applicable tender
-      and purchase order.
-    </span>
+                        <div class="service-icon">📋</div>
+                        <h3>Tenders & Bidding</h3>
+                        <p>
+                            Get guidance on tender documents, bid submission
+                            and corrigenda.
+                        </p>
+                        <span class="card-link">Get guidance →</span>
+                    </button>
 
-  </footer>
+                    <button
+                        type="button"
+                        class="service-card"
+                        onclick="sendMessage('How can I check the invoice and payment process?')">
 
-  <!-- JavaScript Files -->
-  <script src="faq.js"></script>
-  <script src="script.js"></script>
+                        <div class="service-icon">💳</div>
+                        <h3>Purchase Orders & Payments</h3>
+                        <p>
+                            Understand purchase orders, invoice submission
+                            and payment procedures.
+                        </p>
+                        <span class="card-link">Get guidance →</span>
+                    </button>
+
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= CHATBOT ================= -->
+        <section class="chatbot-section" id="chatbot">
+            <div class="container">
+
+                <div class="section-heading">
+                    <span class="section-label">INSTANT GUIDANCE</span>
+                    <h2>Ask Vendor Mitra</h2>
+                    <p>
+                        Type your question or select one of the suggested
+                        questions below.
+                    </p>
+                </div>
+
+                <div class="chat-layout">
+
+                    <!-- CHAT WINDOW -->
+                    <div class="chat-card">
+
+                        <div class="chat-header">
+                            <div class="chat-avatar">🤝</div>
+
+                            <div class="chat-header-text">
+                                <h3>NSPCL Vendor Mitra</h3>
+                                <p>
+                                    <span class="status-dot"></span>
+                                    Digital FAQ Assistant
+                                </p>
+                            </div>
+
+                            <button
+                                type="button"
+                                id="clearChat"
+                                class="clear-chat"
+                                aria-label="Clear conversation"
+                                title="Clear conversation">
+                                Clear Chat
+                            </button>
+                        </div>
+
+
+                        <!-- Messages are inserted here by script.js -->
+                        <div
+                            class="chat-messages"
+                            id="chatMessages"
+                            role="log"
+                            aria-live="polite"
+                            aria-label="Chat conversation">
+
+                            <div class="message bot-message">
+                                <div class="message-avatar">🤝</div>
+                                <div class="message-content">
+                                    <p>
+                                        Hello! Welcome to NSPCL Vendor Mitra.
+                                        I can guide you on vendor registration,
+                                        tenders, GeM, purchase orders, invoices
+                                        and other vendor-related FAQs.
+                                    </p>
+                                    <p>
+                                        How may I assist you today?
+                                    </p>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <!-- SUGGESTED QUESTIONS -->
+                        <div class="quick-questions">
+                            <h4>Suggested Questions</h4>
+
+                            <div
+                                class="quick-question-list"
+                                id="quickQuestions">
+
+                                <button
+                                    type="button"
+                                    class="quick-question"
+                                    onclick="sendMessage('How do I register as a vendor?')">
+                                    How do I register as a vendor?
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="quick-question"
+                                    onclick="sendMessage('Where can I find NSPCL tenders?')">
+                                    Where can I find NSPCL tenders?
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="quick-question"
+                                    onclick="sendMessage('What is EMD in a tender?')">
+                                    What is EMD?
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="quick-question"
+                                    onclick="sendMessage('What documents are required for invoice submission?')">
+                                    Invoice submission documents
+                                </button>
+
+                            </div>
+                        </div>
+
+
+                        <!-- MESSAGE INPUT -->
+                        <form class="chat-input-form" id="chatForm">
+
+                            <label for="chatInput" class="visually-hidden">
+                                Enter your vendor support question
+                            </label>
+
+                            <input
+                                type="text"
+                                id="chatInput"
+                                class="chat-input"
+                                placeholder="Type your question here..."
+                                autocomplete="off"
+                                maxlength="1000"
+                                required>
+
+                            <button
+                                type="submit"
+                                id="sendButton"
+                                class="send-button">
+                                Send
+                                <span aria-hidden="true">➤</span>
+                            </button>
+
+                        </form>
+
+                        <p class="chat-disclaimer">
+                            Vendor Mitra provides general guidance based on
+                            its FAQ knowledge base. Please verify important
+                            information against official NSPCL tender
+                            documents and instructions.
+                        </p>
+
+                    </div>
+
+
+                    <!-- CHAT SIDEBAR -->
+                    <aside class="sidebar">
+
+                        <div class="sidebar-card">
+                            <div class="sidebar-icon">💡</div>
+                            <h3>How to Use Vendor Mitra</h3>
+
+                            <ol>
+                                <li>Type your question in the chat box.</li>
+                                <li>Select a suggested question for quick help.</li>
+                                <li>Review the response and follow official links.</li>
+                            </ol>
+                        </div>
+
+                        <div class="sidebar-card">
+                            <div class="sidebar-icon">🔎</div>
+                            <h3>Popular Topics</h3>
+
+                            <ul class="topic-list">
+                                <li>
+                                    <button
+                                        type="button"
+                                        onclick="sendMessage('Tell me about vendor registration')">
+                                        Vendor registration
+                                    </button>
+                                </li>
+                                <li>
+                                    <button
+                                        type="button"
+                                        onclick="sendMessage('Explain the tender bidding process')">
+                                        Tender bidding
+                                    </button>
+                                </li>
+                                <li>
+                                    <button
+                                        type="button"
+                                        onclick="sendMessage('Explain EMD and performance security')">
+                                        EMD and performance security
+                                    </button>
+                                </li>
+                                <li>
+                                    <button
+                                        type="button"
+                                        onclick="sendMessage('How do I submit an invoice to NSPCL?')">
+                                        Invoice submission
+                                    </button>
+                                </li>
+                                <li>
+                                    <button
+                                        type="button"
+                                        onclick="sendMessage('How can I update my vendor profile?')">
+                                        Vendor profile updates
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="sidebar-card help-card">
+                            <div class="sidebar-icon">🌐</div>
+                            <h3>Need Official Information?</h3>
+                            <p>
+                                Refer to the official portals for authoritative
+                                instructions and the latest updates.
+                            </p>
+
+                            <a
+                                href="https://www.nspcl.co.in/"
+                                target="_blank"
+                                rel="noopener noreferrer">
+                                Visit NSPCL Website →
+                            </a>
+                        </div>
+
+                    </aside>
+
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= FAQ SECTION ================= -->
+        <section class="faq-section" id="faqs">
+            <div class="container">
+
+                <div class="section-heading">
+                    <span class="section-label">QUICK REFERENCE</span>
+                    <h2>Frequently Asked Questions</h2>
+                    <p>
+                        Explore common vendor queries or ask Vendor Mitra
+                        for guidance.
+                    </p>
+                </div>
+
+                <!-- FAQs are populated by script.js -->
+                <div class="faq-list" id="faqList">
+
+                    <details class="faq-item">
+                        <summary class="faq-question">
+                            How can I find NSPCL tender opportunities?
+                        </summary>
+                        <div class="faq-answer">
+                            <p>
+                                Visit the official NSPCL website and the
+                                Central Public Procurement Portal. Review
+                                each tender notice for eligibility,
+                                deadlines and submission requirements.
+                            </p>
+                            <p>
+                                <a
+                                    href="https://www.nspcl.co.in/"
+                                    target="_blank"
+                                    rel="noopener noreferrer">
+                                    NSPCL Website
+                                </a>
+                                |
+                                <a
+                                    href="https://eprocure.gov.in/eprocure/app"
+                                    target="_blank"
+                                    rel="noopener noreferrer">
+                                    Central Public Procurement Portal
+                                </a>
+                            </p>
+                        </div>
+                    </details>
+
+                    <details class="faq-item">
+                        <summary class="faq-question">
+                            What should I check before submitting a bid?
+                        </summary>
+                        <div class="faq-answer">
+                            <p>
+                                Read the complete tender document, verify
+                                eligibility and technical requirements,
+                                prepare the requested documents, and submit
+                                your bid before the deadline specified in
+                                the tender.
+                            </p>
+                        </div>
+                    </details>
+
+                    <details class="faq-item">
+                        <summary class="faq-question">
+                            What is EMD?
+                        </summary>
+                        <div class="faq-answer">
+                            <p>
+                                EMD stands for Earnest Money Deposit. It may
+                                be required as part of a tender, subject to
+                                the tender conditions and any applicable
+                                exemptions.
+                            </p>
+                        </div>
+                    </details>
+
+                    <details class="faq-item">
+                        <summary class="faq-question">
+                            Where can I find GeM information?
+                        </summary>
+                        <div class="faq-answer">
+                            <p>
+                                Visit the Government e-Marketplace portal
+                                for official information about seller
+                                registration, products, services and
+                                procurement.
+                            </p>
+                            <p>
+                                <a
+                                    href="https://gem.gov.in/"
+                                    target="_blank"
+                                    rel="noopener noreferrer">
+                                    Visit GeM
+                                </a>
+                            </p>
+                        </div>
+                    </details>
+
+                    <details class="faq-item">
+                        <summary class="faq-question">
+                            How can I update my vendor details?
+                        </summary>
+                        <div class="faq-answer">
+                            <p>
+                                Follow the applicable vendor registration
+                                or procurement portal procedure. For
+                                NSPCL-specific changes, refer to the
+                                relevant instructions or contact the
+                                designated NSPCL department.
+                            </p>
+                        </div>
+                    </details>
+
+                </div>
+
+                <div class="faq-more">
+                    <p>Could not find your answer?</p>
+                    <a href="#chatbot" class="btn btn-primary">
+                        Ask Vendor Mitra
+                    </a>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- ================= USEFUL LINKS ================= -->
+        <section class="useful-links-section" id="useful-links">
+            <div class="container">
+
+                <div class="section-heading">
+                    <span class="section-label">OFFICIAL RESOURCES</span>
+                    <h2>Useful Links for Vendors</h2>
+                    <p>
+                        Access the official websites for additional
+                        information and services.
+                    </p>
+                </div>
+
+                <div class="useful-links-grid">
+
+                    <a
+                        href="https://www.nspcl.co.in/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="useful-link-card">
+
+                        <div class="link-icon">🏢</div>
+                        <div>
+                            <h3>NSPCL Official Website</h3>
+                            <p>Company information and official updates.</p>
+                        </div>
+                        <span aria-hidden="true">↗</span>
+                    </a>
+
+                    <a
+                        href="https://eprocure.gov.in/eprocure/app"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="useful-link-card">
+
+                        <div class="link-icon">📑</div>
+                        <div>
+                            <h3>Central Public Procurement Portal</h3>
+                            <p>Government tender notices and e-procurement.</p>
+                        </div>
+                        <span aria-hidden="true">↗</span>
+                    </a>
+
+                    <a
+                        href="https://gem.gov.in/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="useful-link-card">
+
+                        <div class="link-icon">🛒</div>
+                        <div>
+                            <h3>Government e-Marketplace</h3>
+                            <p>Government procurement marketplace.</p>
+                        </div>
+                        <span aria-hidden="true">↗</span>
+                    </a>
+
+                    <a
+                        href="https://udyamregistration.gov.in/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="useful-link-card">
+
+                        <div class="link-icon">📄</div>
+                        <div>
+                            <h3>Udyam Registration</h3>
+                            <p>Official MSME registration information.</p>
+                        </div>
+                        <span aria-hidden="true">↗</span>
+                    </a>
+
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="footer">
+        <div class="container footer-container">
+
+            <div class="footer-brand">
+                <h2>NSPCL Vendor Mitra</h2>
+                <p>
+                    Simplifying vendor support through digital guidance.
+                </p>
+            </div>
+
+            <div class="footer-links">
+                <a href="#home">Home</a>
+                <a href="#services">Services</a>
+                <a href="#chatbot">Ask Mitra</a>
+                <a href="#faqs">FAQs</a>
+            </div>
+
+            <div class="footer-note">
+                <p>
+                    This is an informational FAQ assistant and is not an
+                    official transaction-processing system. Responses do
+                    not replace the applicable tender conditions or
+                    instructions issued by NSPCL.
+                </p>
+            </div>
+
+            <div class="footer-bottom">
+                <p>
+                    &copy; <span id="currentYear">2026</span>
+                    NSPCL Vendor Mitra. All rights reserved.
+                </p>
+                <p>Designed for vendor information and assistance.</p>
+            </div>
+
+        </div>
+    </footer>
+
+
+    <!-- ================= SMALL PAGE SCRIPT ================= -->
+    <script>
+        // Automatically update the copyright year.
+        document.getElementById("currentYear").textContent =
+            new Date().getFullYear();
+
+        // Highlight the active navigation link while scrolling.
+        document.addEventListener("DOMContentLoaded", function () {
+            const sections = document.querySelectorAll(
+                "main section[id], main section"
+            );
+
+            const navLinks = document.querySelectorAll(".nav-link");
+
+            function updateActiveLink() {
+                let currentSection = "home";
+
+                sections.forEach(function (section) {
+                    if (!section.id) return;
+
+                    const sectionTop =
+                        section.getBoundingClientRect().top;
+
+                    if (sectionTop <= 150) {
+                        currentSection = section.id;
+                    }
+                });
+
+                navLinks.forEach(function (link) {
+                    const target = link.getAttribute("href");
+
+                    link.classList.toggle(
+                        "active",
+                        target === "#" + currentSection
+                    );
+                });
+            }
+
+            window.addEventListener("scroll", updateActiveLink);
+            updateActiveLink();
+        });
+    </script>
 
 </body>
 </html>
-
+```
