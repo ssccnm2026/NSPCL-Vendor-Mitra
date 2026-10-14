@@ -15,6 +15,7 @@
   <style>
     /* =========================================
        VENDOR MITRA CHAT POPUP
+       Does not change the main website layout
        ========================================= */
 
     .chat-launcher {
@@ -22,15 +23,15 @@
       right: 24px;
       bottom: 24px;
       z-index: 100001;
-      width: 64px;
-      height: 64px;
+      width: 60px;
+      height: 60px;
       border: none;
       border-radius: 50%;
       background: linear-gradient(135deg, #0879e8, #04b6a4);
       color: #ffffff;
-      font-size: 28px;
+      font-size: 26px;
       cursor: pointer;
-      box-shadow: 0 8px 28px rgba(0, 60, 130, 0.3);
+      box-shadow: 0 6px 20px rgba(0, 60, 130, 0.25);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -38,8 +39,8 @@
     }
 
     .chat-launcher:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 32px rgba(0, 60, 130, 0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(0, 60, 130, 0.3);
     }
 
     .chat-launcher:focus-visible {
@@ -47,68 +48,69 @@
       outline-offset: 4px;
     }
 
+    /* Keep the chatbot out of the homepage layout when closed. */
     #chatbot.vm-chat-popup {
       display: none;
     }
 
+    /* Compact floating chatbot window. */
     #chatbot.vm-chat-popup.vm-chat-open {
       display: block !important;
       position: fixed;
       right: 24px;
-      bottom: 100px;
+      bottom: 96px;
       z-index: 100000;
-      width: min(760px, calc(100vw - 32px));
-      max-height: calc(100vh - 125px);
+      width: min(420px, calc(100vw - 32px));
+      max-height: min(620px, calc(100vh - 120px));
       overflow-x: hidden;
       overflow-y: auto;
       background: #ffffff;
       border: 1px solid #dce5ef;
-      border-radius: 18px;
-      box-shadow: 0 18px 60px rgba(8, 35, 70, 0.28);
-      animation: vmPopupAppear 0.25s ease-out;
+      border-radius: 16px;
+      box-shadow: 0 12px 36px rgba(8, 35, 70, 0.22);
+      animation: vmPopupAppear 0.2s ease-out;
     }
 
     @keyframes vmPopupAppear {
       from {
         opacity: 0;
-        transform: translateY(14px) scale(0.98);
+        transform: translateY(8px);
       }
       to {
         opacity: 1;
-        transform: translateY(0) scale(1);
+        transform: translateY(0);
       }
     }
 
-    #chatbot.vm-chat-popup.vm-chat-open .chat-messages,
     #chatbot.vm-chat-popup.vm-chat-open #chatMessages {
-      max-height: 320px;
+      max-height: 260px;
       overflow-y: auto;
     }
 
-    #chatbot.vm-chat-popup.vm-chat-open .chat-input-area {
+    #chatbot.vm-chat-popup.vm-chat-open .chatbot-header {
       position: sticky;
-      bottom: 0;
-      background: #ffffff;
+      top: 0;
+      z-index: 2;
     }
 
     @media (max-width: 600px) {
       .chat-launcher {
         right: 16px;
         bottom: 16px;
-        width: 58px;
-        height: 58px;
+        width: 54px;
+        height: 54px;
       }
 
       #chatbot.vm-chat-popup.vm-chat-open {
         right: 10px;
-        bottom: 84px;
+        bottom: 80px;
         width: calc(100vw - 20px);
-        max-height: calc(100vh - 100px);
-        border-radius: 14px;
+        max-height: calc(100vh - 96px);
+        border-radius: 12px;
       }
 
       #chatbot.vm-chat-popup.vm-chat-open #chatMessages {
-        max-height: 42vh;
+        max-height: 35vh;
       }
     }
 
@@ -153,10 +155,12 @@
   </header>
 
   <!-- =========================================
-       HERO
+       MAIN CONTENT
        ========================================= -->
 
   <main>
+
+    <!-- HERO -->
 
     <section class="hero" id="home">
       <div class="container hero-content">
@@ -221,9 +225,7 @@
       </div>
     </section>
 
-    <!-- =========================================
-         SERVICES
-         ========================================= -->
+    <!-- SERVICES -->
 
     <section class="section services-section" id="services">
       <div class="container">
@@ -246,47 +248,59 @@
               Find general guidance about vendor registration and
               required documentation.
             </p>
-            <button type="button" class="text-link"
-              data-vm-question="How do I register as a vendor?">
+            <button
+              type="button"
+              class="text-link"
+              data-vm-question="How do I register as a vendor?"
+            >
               Ask a question →
             </button>
           </article>
 
           <article class="service-card">
             <div class="service-icon">📑</div>
-            <h3>Tenders & Bids</h3>
+            <h3>Tenders &amp; Bids</h3>
             <p>
               Explore common questions about tender documents,
               bid submission and procurement.
             </p>
-            <button type="button" class="text-link"
-              data-vm-question="How do I submit a tender bid?">
+            <button
+              type="button"
+              class="text-link"
+              data-vm-question="How do I submit a tender bid?"
+            >
               Ask a question →
             </button>
           </article>
 
           <article class="service-card">
             <div class="service-icon">🔐</div>
-            <h3>EMD & Security</h3>
+            <h3>EMD &amp; Security</h3>
             <p>
               Find general information about earnest money deposit
               and performance security.
             </p>
-            <button type="button" class="text-link"
-              data-vm-question="What is EMD?">
+            <button
+              type="button"
+              class="text-link"
+              data-vm-question="What is EMD?"
+            >
               Ask a question →
             </button>
           </article>
 
           <article class="service-card">
             <div class="service-icon">🛒</div>
-            <h3>GeM & MSME</h3>
+            <h3>GeM &amp; MSME</h3>
             <p>
               Explore FAQs related to GeM procurement and
               MSME-related vendor queries.
             </p>
-            <button type="button" class="text-link"
-              data-vm-question="What is GeM?">
+            <button
+              type="button"
+              class="text-link"
+              data-vm-question="What is GeM?"
+            >
               Ask a question →
             </button>
           </article>
@@ -298,21 +312,27 @@
               Find guidance on purchase orders, delivery requirements
               and related documentation.
             </p>
-            <button type="button" class="text-link"
-              data-vm-question="What should I check in a purchase order?">
+            <button
+              type="button"
+              class="text-link"
+              data-vm-question="What should I check in a purchase order?"
+            >
               Ask a question →
             </button>
           </article>
 
           <article class="service-card">
             <div class="service-icon">🧾</div>
-            <h3>Invoices & Payments</h3>
+            <h3>Invoices &amp; Payments</h3>
             <p>
               Learn about common invoice documentation and
               payment-related enquiries.
             </p>
-            <button type="button" class="text-link"
-              data-vm-question="What documents are needed for invoice submission?">
+            <button
+              type="button"
+              class="text-link"
+              data-vm-question="What documents are needed for invoice submission?"
+            >
               Ask a question →
             </button>
           </article>
@@ -321,9 +341,8 @@
       </div>
     </section>
 
-    <!-- =========================================
-         CHATBOT
-         ========================================= -->
+    <!-- CHATBOT
+         The popup CSS hides this section until opened. -->
 
     <section class="section chatbot-section" id="chatbot">
       <div class="chatbot-header">
@@ -402,9 +421,7 @@
       </p>
     </section>
 
-    <!-- =========================================
-         FAQ SECTION
-         ========================================= -->
+    <!-- FREQUENTLY ASKED QUESTIONS -->
 
     <section class="section faq-section" id="faqs">
       <div class="container">
@@ -427,7 +444,11 @@
             contact details provided in your tender or purchase order.
           </p>
 
-          <button type="button" class="btn btn-primary" data-vm-open>
+          <button
+            type="button"
+            class="btn btn-primary"
+            data-vm-open
+          >
             Ask Vendor Mitra
           </button>
         </div>
@@ -435,10 +456,7 @@
       </div>
     </section>
 
-    <!-- =========================================
-         USEFUL LINKS
-         Replace placeholder links with verified official URLs
-         ========================================= -->
+    <!-- USEFUL LINKS -->
 
     <section class="section useful-links-section" id="useful-links">
       <div class="container">
@@ -523,9 +541,7 @@
 
   </main>
 
-  <!-- =========================================
-       FOOTER
-       ========================================= -->
+  <!-- FOOTER -->
 
   <footer class="site-footer">
     <div class="container footer-inner">
@@ -541,9 +557,7 @@
     </div>
   </footer>
 
-  <!-- =========================================
-       FLOATING CHAT BUTTON
-       ========================================= -->
+  <!-- FLOATING CHAT BUTTON -->
 
   <button
     type="button"
@@ -555,24 +569,20 @@
     title="Chat with Vendor Mitra"
   >💬</button>
 
-  <!-- Load FAQ data before chatbot logic -->
+  <!-- FAQ DATA MUST LOAD BEFORE CHATBOT LOGIC -->
+
   <script src="./faq.js"></script>
   <script src="./script.js"></script>
 
-  <!-- =========================================
-       CHAT OPEN / CLOSE AND AUTO-OPEN
-       ========================================= -->
+  <!-- CHAT OPEN / CLOSE LOGIC: NO AUTO-OPEN TIMER -->
 
   <script>
     (function () {
       "use strict";
 
-      const AUTO_OPEN_DELAY = 3000;
+      let elements = {};
 
-      let chatManuallyInteracted = false;
-      let autoOpenTimer = null;
-
-      function getChatElements() {
+      function getElements() {
         return {
           chatbot: document.getElementById("chatbot"),
           launcher: document.getElementById("chatLauncher"),
@@ -582,11 +592,7 @@
       }
 
       function updateLauncher(isOpen) {
-        const elements = getChatElements();
-
-        if (!elements.launcher) {
-          return;
-        }
+        if (!elements.launcher) return;
 
         elements.launcher.setAttribute(
           "aria-expanded",
@@ -595,7 +601,9 @@
 
         elements.launcher.setAttribute(
           "aria-label",
-          isOpen ? "Close Vendor Mitra chat" : "Open Vendor Mitra chat"
+          isOpen
+            ? "Close Vendor Mitra chat"
+            : "Open Vendor Mitra chat"
         );
 
         elements.launcher.title = isOpen
@@ -606,14 +614,7 @@
       }
 
       function openVendorChat(focusInput) {
-        const elements = getChatElements();
-
-        if (!elements.chatbot) {
-          console.error(
-            "Vendor Mitra: element with id='chatbot' was not found."
-          );
-          return;
-        }
+        if (!elements.chatbot) return;
 
         elements.chatbot.classList.add("vm-chat-popup");
         elements.chatbot.classList.add("vm-chat-open");
@@ -628,39 +629,28 @@
       }
 
       function closeVendorChat() {
-        const elements = getChatElements();
-
-        if (!elements.chatbot) {
-          return;
-        }
+        if (!elements.chatbot) return;
 
         elements.chatbot.classList.remove("vm-chat-open");
         updateLauncher(false);
       }
 
-      function initialiseVendorChat() {
-        const elements = getChatElements();
+      function initialise() {
+        elements = getElements();
 
         if (!elements.chatbot || !elements.launcher) {
           console.error(
-            "Vendor Mitra: chatbot or floating launcher is missing."
+            "Vendor Mitra: chatbot or floating launcher was not found."
           );
           return;
         }
 
-        /* Start hidden; the popup opens automatically after 3 seconds. */
+        /* Always start with the popup closed. */
         elements.chatbot.classList.add("vm-chat-popup");
+        elements.chatbot.classList.remove("vm-chat-open");
         updateLauncher(false);
 
-        /* Floating button toggles the chatbot. */
         elements.launcher.addEventListener("click", function () {
-          chatManuallyInteracted = true;
-
-          if (autoOpenTimer !== null) {
-            window.clearTimeout(autoOpenTimer);
-            autoOpenTimer = null;
-          }
-
           if (elements.chatbot.classList.contains("vm-chat-open")) {
             closeVendorChat();
           } else {
@@ -668,109 +658,74 @@
           }
         });
 
-        /* Close button inside the chatbot. */
         if (elements.closeButton) {
-          elements.closeButton.addEventListener("click", function () {
-            chatManuallyInteracted = true;
-
-            if (autoOpenTimer !== null) {
-              window.clearTimeout(autoOpenTimer);
-              autoOpenTimer = null;
-            }
-
-            closeVendorChat();
-          });
+          elements.closeButton.addEventListener(
+            "click",
+            closeVendorChat
+          );
         }
 
-        /* Buttons elsewhere on the page can open the chat. */
         document.querySelectorAll("[data-vm-open]").forEach(function (button) {
           button.addEventListener("click", function () {
-            chatManuallyInteracted = true;
-
-            if (autoOpenTimer !== null) {
-              window.clearTimeout(autoOpenTimer);
-              autoOpenTimer = null;
-            }
-
             openVendorChat(true);
           });
         });
 
-        /* Suggested service questions open chat and send the question. */
         document.querySelectorAll("[data-vm-question]").forEach(function (button) {
           button.addEventListener("click", function () {
-            chatManuallyInteracted = true;
-
-            if (autoOpenTimer !== null) {
-              window.clearTimeout(autoOpenTimer);
-              autoOpenTimer = null;
-            }
+            const question = button.getAttribute("data-vm-question");
 
             openVendorChat(false);
-
-            const question = button.getAttribute("data-vm-question");
 
             if (typeof window.vmAsk === "function") {
               window.vmAsk(question);
             } else if (typeof window.sendMessage === "function") {
               window.sendMessage(question);
+            } else if (elements.input) {
+              elements.input.value = question;
+              elements.input.focus();
             }
           });
         });
 
-        /* Open automatically after 3 seconds unless the visitor
-           has already interacted with the chat controls. */
-        autoOpenTimer = window.setTimeout(function () {
-          if (!chatManuallyInteracted) {
-            openVendorChat(false);
-          }
-        }, AUTO_OPEN_DELAY);
-
-        /* Update the copyright year. */
         const yearElement = document.getElementById("currentYear");
-
         if (yearElement) {
           yearElement.textContent = new Date().getFullYear();
         }
 
-        /* Smooth scrolling for in-page navigation. */
+        /* Smooth scrolling; the chat navigation opens the popup. */
         document.querySelectorAll('a[href^="#"]').forEach(function (link) {
           link.addEventListener("click", function (event) {
             const targetId = link.getAttribute("href");
+            if (!targetId || targetId === "#") return;
 
-            if (!targetId || targetId === "#") {
+            if (targetId === "#chatbot") {
+              event.preventDefault();
+              openVendorChat(true);
               return;
             }
 
             const target = document.querySelector(targetId);
-
-            if (target && targetId !== "#chatbot") {
+            if (target) {
               event.preventDefault();
-
               target.scrollIntoView({
                 behavior: "smooth",
                 block: "start"
               });
-            } else if (targetId === "#chatbot") {
-              event.preventDefault();
-              openVendorChat(true);
             }
           });
         });
 
-        /* Make open/close helpers available if needed elsewhere. */
         window.openVendorChat = openVendorChat;
         window.closeVendorChat = closeVendorChat;
       }
 
       if (document.readyState === "loading") {
-        document.addEventListener(
-          "DOMContentLoaded",
-          initialiseVendorChat,
-          { once: true }
-        );
+        document.addEventListener("DOMContentLoaded", initialise, {
+          once: true
+        });
       } else {
-        initialiseVendorChat();
+        initialise();
       }
     })();
   </script>
