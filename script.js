@@ -1,974 +1,656 @@
 
 /* =========================================================
    NSPCL VENDOR MITRA
-   Vendor Support Chatbot - Complete JavaScript
-   Free GitHub Pages Compatible
+   Standalone Vendor Support FAQ Chatbot
+   Works with index.html and style.css
+   No API key or paid service required
    ========================================================= */
 
 "use strict";
 
-/* ---------- 1. CONFIGURATION ---------- */
+/* -------------------- FAQ KNOWLEDGE BASE -------------------- */
 
-const CONFIG = {
-    botName: "NSPCL Vendor Mitra",
-    organization: "NTPC-SAIL Power Company Limited (NSPCL)",
-    typingDelay: 650,
-    maxMessageLength: 1000,
-    enableSessionHistory: true
-};
-
-/* ---------- 2. FAQ KNOWLEDGE BASE ---------- */
-
-const FAQS = [
-    {
-        category: "Vendor Registration",
-        keywords: [
-            "vendor registration", "register vendor", "new vendor",
-            "supplier registration", "enlistment", "enlist supplier",
-            "become a vendor", "vendor enlistment"
-        ],
-        question: "How can I register as an NSPCL vendor?",
-        answer:
-            "To begin vendor registration:\n\n" +
-            "1. Visit the official NSPCL website: https://www.nspcl.co.in/\n" +
-            "2. Look for the relevant vendor, procurement or tender section.\n" +
-            "3. Check the registration procedure and eligibility conditions.\n" +
-            "4. Prepare the documents specified in the applicable notice.\n" +
-            "5. Submit your application through the designated official channel.\n\n" +
-            "The applicable procedure may differ depending on the nature of the supply or service. Please verify the latest requirements with NSPCL."
-    },
-
-    {
-        category: "GeM",
-        keywords: [
-            "gem", "government e marketplace", "government e-marketplace",
-            "gem registration", "gem seller", "seller registration",
-            "gem portal", "register on gem"
-        ],
-        question: "How do I register on GeM?",
-        answer:
-            "GeM (Government e-Marketplace) is the Government of India's online procurement platform.\n\n" +
-            "To get started:\n" +
-            "1. Visit https://gem.gov.in/\n" +
-            "2. Select the seller or service provider registration option.\n" +
-            "3. Follow the current registration and verification process.\n" +
-            "4. Complete your organization and product/service details.\n" +
-            "5. Review the applicable terms before participating in bids.\n\n" +
-            "GeM registration and NSPCL-specific eligibility are separate matters. Always check the tender's requirements."
-    },
-
-    {
-        category: "Tender Information",
-        keywords: [
-            "tender", "tenders", "tender notice", "upcoming tender",
-            "open tender", "tender enquiry", "nspcl tender",
-            "find tender", "tender list", "procurement notice"
-        ],
-        question: "Where can I find NSPCL tenders?",
-        answer:
-            "You can check the following official portals:\n\n" +
-            "• NSPCL website: https://www.nspcl.co.in/\n" +
-            "• Central Public Procurement Portal: https://eprocure.gov.in/eprocure/app\n" +
-            "• GeM: https://gem.gov.in/\n\n" +
-            "Search using NSPCL or the relevant tender description. Check the tender reference, issuing unit, submission deadline, amendments and eligibility conditions before bidding."
-    },
-
-    {
-        category: "Bid Submission",
-        keywords: [
-            "submit bid", "bid submission", "upload bid",
-            "how to bid", "tender submission", "online bidding",
-            "technical bid", "price bid", "financial bid"
-        ],
-        question: "How do I submit a tender bid?",
-        answer:
-            "A typical electronic bidding process involves:\n\n" +
-            "1. Read the complete tender document and amendments.\n" +
-            "2. Confirm eligibility and submission requirements.\n" +
-            "3. Prepare the technical and financial documents in the prescribed format.\n" +
-            "4. Complete the required portal registration and digital-signature steps, where applicable.\n" +
-            "5. Upload the documents and submit the bid before the deadline.\n" +
-            "6. Save the submission acknowledgement.\n\n" +
-            "Follow the specific tender instructions. The applicable portal may prescribe a different process."
-    },
-
-    {
-        category: "Tender Documents",
-        keywords: [
-            "documents required", "required documents", "documents for tender",
-            "tender documents", "document checklist", "what documents",
-            "eligibility documents", "documents needed"
-        ],
-        question: "What documents may be required for a tender?",
-        answer:
-            "Depending on the tender, the checklist may include:\n\n" +
-            "• Company or business registration details.\n" +
-            "• PAN and applicable GST registration details.\n" +
-            "• Bank details and supporting documents, if requested.\n" +
-            "• Relevant experience and past-performance documents.\n" +
-            "• Technical specifications and compliance statements.\n" +
-            "• Signed tender forms and declarations.\n" +
-            "• EMD or exemption documents, where applicable.\n" +
-            "• Financial statements or other qualification documents, if specified.\n\n" +
-            "This is a general checklist, not an official NSPCL requirement. The tender document takes precedence."
-    },
-
-    {
-        category: "EMD",
-        keywords: [
-            "emd", "earnest money deposit", "bid security",
-            "emd exemption", "exemption from emd", "bid security exemption"
-        ],
-        question: "What is EMD?",
-        answer:
-            "EMD stands for Earnest Money Deposit. It may be required as bid security in a tender.\n\n" +
-            "Whether EMD is applicable, its amount, acceptable payment method, exemptions and refund conditions depend on the tender and applicable procurement rules.\n\n" +
-            "Please check the tender's EMD clause and any amendments before submitting your bid."
-    },
-
-    {
-        category: "Performance Security",
-        keywords: [
-            "security deposit", "performance security",
-            "performance bank guarantee", "pbg", "bank guarantee",
-            "contract security", "performance guarantee"
-        ],
-        question: "What is Performance Security?",
-        answer:
-            "Performance Security is a contractual security that may be required from a successful bidder to secure performance of the contract.\n\n" +
-            "The amount, acceptable instrument, validity, submission deadline, extension and release conditions are governed by the applicable tender and purchase order.\n\n" +
-            "Please refer to the relevant contractual clauses rather than assuming a standard percentage or validity period."
-    },
-
-    {
-        category: "Purchase Orders",
-        keywords: [
-            "purchase order", "po", "purchase order copy",
-            "order status", "po status", "order details",
-            "po amendment", "change in purchase order"
-        ],
-        question: "How can I get my Purchase Order details?",
-        answer:
-            "For Purchase Order (PO) details:\n\n" +
-            "1. Refer to the PO issued by NSPCL.\n" +
-            "2. Check the order number, issuing unit, scope, prices and delivery schedule.\n" +
-            "3. For a missing copy, amendment or clarification, contact the purchasing officer or the official contact mentioned in your order.\n\n" +
-            "This chatbot cannot access internal SAP records or retrieve an individual vendor's PO."
-    },
-
-    {
-        category: "Invoice and Payment",
-        keywords: [
-            "payment", "payment status", "vendor payment",
-            "invoice", "invoice status", "bill status",
-            "payment pending", "payment delay", "bill submitted",
-            "when will payment", "outstanding payment"
-        ],
-        question: "How can I check my invoice or payment status?",
-        answer:
-            "For an invoice or payment enquiry:\n\n" +
-            "1. Keep your PO or contract number available.\n" +
-            "2. Note the invoice number and submission date.\n" +
-            "3. Check whether the invoice and supporting documents have been submitted as required.\n" +
-            "4. Contact the designated NSPCL finance or purchasing contact using the official communication channel.\n\n" +
-            "Payment processing may depend on contract terms, receipt or completion confirmation, document verification and applicable approvals.\n\n" +
-            "For your privacy, do not enter bank account numbers or other confidential financial details into this public chatbot."
-    },
-
-    {
-        category: "GST and Tax",
-        keywords: [
-            "gst", "gst invoice", "tax invoice", "gst details",
-            "tds", "tax deduction", "pan", "tax certificate"
-        ],
-        question: "What should I check in a GST invoice?",
-        answer:
-            "Check the applicable invoice requirements, including:\n\n" +
-            "• Supplier and recipient details.\n" +
-            "• GSTINs, where applicable.\n" +
-            "• Invoice number and date.\n" +
-            "• Description, quantity and value of goods or services.\n" +
-            "• Applicable tax rates and amounts.\n" +
-            "• PO or contract references, where required.\n\n" +
-            "Requirements depend on the transaction and applicable tax rules. Follow the contract and current GST requirements."
-    },
-
-    {
-        category: "Delivery",
-        keywords: [
-            "delivery", "delivery schedule", "delivery date",
-            "delivery extension", "extension of delivery",
-            "dispatch", "material dispatch", "late delivery",
-            "delivery period"
-        ],
-        question: "How can I request a delivery extension?",
-        answer:
-            "For a delivery extension request:\n\n" +
-            "1. Refer to the delivery clause in your PO or contract.\n" +
-            "2. Submit a written request to the designated NSPCL purchasing contact.\n" +
-            "3. Mention the PO number, affected items, original delivery date, reasons and proposed revised schedule.\n" +
-            "4. Attach relevant supporting documents, if applicable.\n\n" +
-            "An extension is subject to the applicable contract and approval by the authorized official. Do not assume an extension is approved until formally confirmed."
-    },
-
-    {
-        category: "MSME",
-        keywords: [
-            "msme", "msme registration", "udyam",
-            "udyam registration", "micro small medium enterprise",
-            "msme benefit", "msme payment"
-        ],
-        question: "How can an MSME supplier provide registration details?",
-        answer:
-            "MSME suppliers can refer to the official Udyam Registration portal: https://udyamregistration.gov.in/\n\n" +
-            "If MSME status is relevant to an NSPCL tender or contract, review the specific tender conditions and submit the applicable supporting documents through the prescribed channel.\n\n" +
-            "Eligibility for a particular benefit depends on the applicable rules and procurement conditions."
-    },
-
-    {
-        category: "Vendor Profile",
-        keywords: [
-            "update vendor", "vendor details", "change address",
-            "change bank details", "bank detail update",
-            "vendor profile", "change gstin", "update gst"
-        ],
-        question: "How can I update vendor details?",
-        answer:
-            "For a vendor profile update:\n\n" +
-            "1. Identify which details need updating.\n" +
-            "2. Contact the designated NSPCL vendor-registration or purchasing contact.\n" +
-            "3. Follow the official verification process and provide only the requested supporting documents.\n" +
-            "4. Obtain confirmation after the change is processed.\n\n" +
-            "Changes to bank details should be handled only through verified official channels. Never share bank credentials, passwords or OTPs with this chatbot."
-    },
-
-    {
-        category: "Technical Queries",
-        keywords: [
-            "technical specification", "technical clarification",
-            "technical query", "drawing", "datasheet",
-            "make and model", "equivalent make", "technical compliance"
-        ],
-        question: "Where can I get technical clarification?",
-        answer:
-            "Please review the technical specification, drawings, scope of supply and applicable amendments in the tender or PO.\n\n" +
-            "If clarification is still required, submit a written query through the tender portal or to the authorized NSPCL contact identified in the tender documents.\n\n" +
-            "Do not rely on this chatbot for binding technical approval or acceptance of an alternative make or specification."
-    },
-
-    {
-        category: "Tender Amendment",
-        keywords: [
-            "corrigendum", "amendment", "tender amendment",
-            "revised tender", "deadline extension",
-            "date extension", "revised due date"
-        ],
-        question: "How can I find tender amendments or corrigenda?",
-        answer:
-            "Visit the portal where the tender was published and search for the original tender reference.\n\n" +
-            "Check all corrigenda, revised schedules, clarifications and changes to eligibility or submission conditions.\n\n" +
-            "Use the latest applicable tender documents and observe the revised deadlines officially published by the issuing authority."
-    },
-
-    {
-        category: "Contact Support",
-        keywords: [
-            "contact", "contact details", "helpline",
-            "customer support", "vendor support",
-            "whom to contact", "email address", "phone number",
-            "talk to person", "human support"
-        ],
-        question: "How can I contact NSPCL for assistance?",
-        answer:
-            "Please visit the official NSPCL website: https://www.nspcl.co.in/\n\n" +
-            "Use the contact information or department details published there, or refer to the contact person named in your tender, PO or contract.\n\n" +
-            "This demo does not have a verified live vendor-support telephone number or email address."
-    },
-
-    {
-        category: "About NSPCL",
-        keywords: [
-            "about nspcl", "what is nspcl",
-            "nspcl full form", "company information",
-            "ntpc sail power company"
-        ],
-        question: "What is NSPCL?",
-        answer:
-            "NSPCL stands for NTPC-SAIL Power Company Limited. It is a joint venture of NTPC Limited and Steel Authority of India Limited (SAIL).\n\n" +
-            "For official company information, visit https://www.nspcl.co.in/."
-    }
+const vendorFAQs = [
+  {
+    question: "What is NSPCL Vendor Mitra?",
+    keywords: ["about", "vendor mitra", "what is nspcl", "nspcl", "company"],
+    answer:
+      "NSPCL Vendor Mitra is a vendor-support chatbot prototype designed to help suppliers understand common procurement procedures, tendering, GeM, purchase orders, invoices, and vendor-related processes. NSPCL (NTPC-SAIL Power Company Limited) is a joint venture of NTPC Limited and SAIL."
+  },
+  {
+    question: "How can I register as an NSPCL vendor?",
+    keywords: ["vendor registration", "register", "new vendor", "enrol", "enroll", "empanelment"],
+    answer:
+      "For vendor registration, first check the applicable vendor-registration instructions or tender documents issued by NSPCL. Keep your business details, PAN, GSTIN (where applicable), bank details, and relevant certificates ready. Submit documents only through the official channel specified by NSPCL. This chatbot cannot register vendors or verify registration status."
+  },
+  {
+    question: "How can I find NSPCL tenders?",
+    keywords: ["tender", "tenders", "nit", "enquiry", "enquiry number", "bid invitation", "open tender"],
+    answer:
+      "Check the official NSPCL website and the e-procurement portal specified in the relevant tender notice. Search using the tender number, title, location, or closing date. Always rely on the official tender notice for the latest details, amendments, and submission deadlines."
+  },
+  {
+    question: "How do I participate in a tender?",
+    keywords: ["participate", "participation", "submit bid", "bid submission", "how to bid", "tender process"],
+    answer:
+      "A typical tender participation process is:\n1. Read the complete tender document and eligibility criteria.\n2. Check the submission deadline and required documents.\n3. Complete portal registration if required.\n4. Prepare technical and commercial submissions as instructed.\n5. Submit EMD or other applicable securities, if required.\n6. Upload and submit the bid before the deadline.\n7. Save the submission acknowledgement.\n\nThe specific tender document always takes precedence."
+  },
+  {
+    question: "Which documents are required for a tender?",
+    keywords: ["documents", "document required", "tender documents", "checklist", "paperwork", "certificate"],
+    answer:
+      "Requirements vary by tender. Commonly requested documents may include:\n• PAN and GST registration, where applicable\n• Business registration documents\n• Relevant experience and performance certificates\n• Technical compliance documents\n• Financial statements or turnover certificates, if required\n• Signed tender forms and declarations\n• EMD or exemption documents, where applicable\n• Bank details and other documents specified in the tender\n\nUse the tender's checklist as the final authority."
+  },
+  {
+    question: "What is EMD?",
+    keywords: ["emd", "earnest money", "bid security", "exemption from emd"],
+    answer:
+      "EMD means Earnest Money Deposit. It may be required as bid security, subject to the tender conditions. The amount, permitted payment method, exemptions, validity, and refund conditions must be checked in the specific tender document."
+  },
+  {
+    question: "What is performance security?",
+    keywords: ["performance security", "performance bank guarantee", "pbg", "security deposit", "bank guarantee"],
+    answer:
+      "Performance security is a security that may be required from a successful bidder to ensure contractual performance. Its amount, format, validity, submission deadline, and release conditions depend on the purchase order and applicable tender conditions."
+  },
+  {
+    question: "What is GeM?",
+    keywords: ["gem", "government e marketplace", "government e-marketplace", "gem portal", "seller registration"],
+    answer:
+      "GeM stands for Government e-Marketplace, an online platform for public procurement. Vendors should use the official GeM portal at https://gem.gov.in for registration, catalogue management, bids, orders, and platform-specific instructions. NSPCL procurement requirements must also be followed wherever applicable."
+  },
+  {
+    question: "How can I submit a quotation?",
+    keywords: ["quotation", "quote", "price bid", "financial bid", "commercial offer", "offer submission"],
+    answer:
+      "Submit your quotation through the method specified in the enquiry or tender. Check the item description, specifications, quantity, delivery terms, taxes, freight, validity, and required supporting documents. Do not submit confidential commercial information through this chatbot."
+  },
+  {
+    question: "What is a technical bid?",
+    keywords: ["technical bid", "technical offer", "technical evaluation", "technical compliance", "deviation"],
+    answer:
+      "A technical bid explains how your offered goods or services meet the tender's technical and qualification requirements. Include the requested specifications, compliance statements, experience records, drawings, certificates, and deviation statements where required. Follow the tender's instructions on whether price information is permitted in the technical bid."
+  },
+  {
+    question: "What is a price bid?",
+    keywords: ["price bid", "financial bid", "commercial bid", "price schedule", "boq", "bill of quantities"],
+    answer:
+      "A price bid contains the commercial offer in the prescribed format. Carefully check units, quantities, taxes, freight, duties, discounts, delivery terms, and arithmetic. Enter prices only in the designated section of the tender or procurement portal."
+  },
+  {
+    question: "How do I check a purchase order?",
+    keywords: ["purchase order", "po status", "po number", "order status", "purchase order status"],
+    answer:
+      "For purchase-order details, refer to the official communication or procurement system made available to your organisation. For assistance, contact the NSPCL officer or procurement contact identified in the purchase order. This chatbot cannot access SAP or confirm the status of an actual purchase order."
+  },
+  {
+    question: "How can I submit an invoice?",
+    keywords: ["invoice", "bill submission", "submit bill", "billing", "invoice submission"],
+    answer:
+      "Follow the invoice-submission instructions in your purchase order or contract. Check that the invoice references the correct PO and includes the required tax details, supporting documents, delivery or service records, and acceptance certificates where applicable. Submit it through the designated official channel."
+  },
+  {
+    question: "How can I check my payment status?",
+    keywords: ["payment", "payment status", "bill status", "payment delay", "outstanding payment", "due payment"],
+    answer:
+      "For payment-status enquiries, contact the designated NSPCL finance or accounts contact using the details in your PO or official correspondence. Keep your PO number, invoice number, invoice date, and submission acknowledgement ready. This chatbot does not have access to payment records."
+  },
+  {
+    question: "What if my GST details need updating?",
+    keywords: ["gst", "gstin", "gst details", "tax", "tax invoice", "pan update"],
+    answer:
+      "Use the official vendor-update process specified by NSPCL or the relevant procurement portal. Provide valid supporting documents and ensure your submitted details match the applicable registration records. Do not post your PAN, GSTIN, or other sensitive business information in this public chatbot."
+  },
+  {
+    question: "Can I request an extension of delivery time?",
+    keywords: ["delivery extension", "extension of delivery", "delivery date", "delivery period", "extend delivery", "extension of time"],
+    answer:
+      "If you need a delivery-time extension, submit a formal written request to the authorised NSPCL contact before the contractual deadline wherever possible. Mention the PO number, affected items, reasons, supporting evidence, and requested revised delivery date. An extension is subject to approval by the competent authority and applicable contract conditions."
+  },
+  {
+    question: "How can I request clarification on a tender?",
+    keywords: ["clarification", "query", "pre bid", "pre-bid", "doubt", "technical query", "tender query"],
+    answer:
+      "Submit tender-related clarifications through the channel and within the timeline specified in the tender notice. Clearly identify the tender number and relevant clause, then state your question concisely. Follow any prescribed pre-bid meeting or online clarification process."
+  },
+  {
+    question: "What is a corrigendum?",
+    keywords: ["corrigendum", "amendment", "tender amendment", "revised tender", "date extension", "addendum"],
+    answer:
+      "A corrigendum is an official correction or amendment to a tender or related document. Always check the official procurement portal for corrigenda, revised dates, updated specifications, and other changes before submitting your bid."
+  },
+  {
+    question: "Can MSME or Udyam vendors receive exemptions?",
+    keywords: ["msme", "udyam", "micro small enterprise", "small enterprise", "msme exemption", "exemption"],
+    answer:
+      "Eligibility for MSME-related benefits or exemptions depends on applicable procurement rules, the tender conditions, and valid supporting documents. Check the exact tender clauses and any applicable policy. Do not assume that every fee, EMD, or requirement is automatically waived."
+  },
+  {
+    question: "How do I update my vendor profile?",
+    keywords: ["update vendor", "vendor profile", "change address", "bank change", "change bank details", "contact details", "profile update"],
+    answer:
+      "Follow the official vendor-master or portal-update procedure provided by NSPCL. Changes to bank details, addresses, authorised contacts, or legal information may require supporting documents and verification. Never share bank account details or credentials in this chatbot."
+  },
+  {
+    question: "How can I contact the procurement team?",
+    keywords: ["contact", "contact number", "email", "procurement team", "buyer", "officer", "helpdesk", "support"],
+    answer:
+      "For a specific enquiry, use the contact details provided in the relevant tender, purchase order, official NSPCL website, or procurement portal. Include the tender or PO reference and a concise description of your query. This prototype does not have a verified live directory of NSPCL officers."
+  },
+  {
+    question: "What should I do if the procurement portal is not working?",
+    keywords: ["portal not working", "technical problem", "login problem", "login issue", "upload problem", "upload error", "website error", "technical issue"],
+    answer:
+      "Try refreshing the page, checking your internet connection, using an updated browser, and verifying the file format and size requirements. If the issue persists, contact the portal's official helpdesk promptly. Record the error message and time, and do not wait until the bid deadline to report a problem."
+  },
+  {
+    question: "How do I find delivery and inspection requirements?",
+    keywords: ["inspection", "delivery", "dispatch", "consignment", "material receipt", "acceptance", "transport"],
+    answer:
+      "Check the PO or contract for the delivery location, delivery schedule, inspection requirements, packing, dispatch documents, and acceptance procedure. Coordinate with the authorised NSPCL contact identified in the contract before dispatch if any requirement is unclear."
+  }
 ];
 
+/* -------------------- QUICK QUESTIONS -------------------- */
 
-/* ---------- 3. QUICK QUESTIONS ---------- */
-
-const QUICK_QUESTIONS = [
-    "How can I register as a vendor?",
-    "Where can I find NSPCL tenders?",
-    "What documents are required for a tender?",
-    "How can I check my payment status?",
-    "How do I submit a bid?",
-    "How can I contact NSPCL?"
+const quickQuestionTexts = [
+  "How can I register as an NSPCL vendor?",
+  "How do I find NSPCL tenders?",
+  "What is EMD?",
+  "How can I submit an invoice?",
+  "How can I check my payment status?",
+  "Can I request an extension of delivery time?"
 ];
 
+/* -------------------- DOM ELEMENTS -------------------- */
 
-/* ---------- 4. DOM ELEMENTS ---------- */
+let chatMessages;
+let chatForm;
+let chatInput;
+let sendButton;
+let clearChatButton;
+let quickQuestionsContainer;
+let faqListContainer;
 
-const chatMessages = document.getElementById("chatMessages");
+let isReplying = false;
 
-const chatForm =
-    document.getElementById("chatForm") ||
-    document.querySelector(".chat-input-form");
+/* -------------------- START THE CHATBOT -------------------- */
 
-const chatInput =
-    document.getElementById("chatInput") ||
-    document.querySelector(".chat-input");
+document.addEventListener("DOMContentLoaded", function () {
+  chatMessages = document.getElementById("chatMessages");
+  chatForm = document.getElementById("chatForm");
+  chatInput = document.getElementById("chatInput");
+  sendButton = document.getElementById("sendButton");
+  clearChatButton = document.getElementById("clearChat");
+  quickQuestionsContainer = document.getElementById("quickQuestions");
+  faqListContainer = document.getElementById("faqList");
 
-const sendButton =
-    document.getElementById("sendButton") ||
-    document.querySelector(".send-button");
-
-const quickQuestionsContainer =
-    document.getElementById("quickQuestions") ||
-    document.querySelector(".quick-question-list");
-
-const clearChatButton =
-    document.getElementById("clearChat");
-
-const faqContainer =
-    document.getElementById("faqList") ||
-    document.querySelector(".faq-list");
-
-
-/* ---------- 5. SESSION STATE ---------- */
-
-let isBotTyping = false;
-
-let conversation = [];
-
-if (CONFIG.enableSessionHistory) {
-    try {
-        const savedConversation = sessionStorage.getItem(
-            "nspclVendorMitraHistory"
-        );
-
-        if (savedConversation) {
-            const parsed = JSON.parse(savedConversation);
-
-            if (Array.isArray(parsed)) {
-                conversation = parsed.filter(function (message) {
-                    return (
-                        message &&
-                        ["bot", "user"].includes(message.role) &&
-                        typeof message.text === "string"
-                    );
-                }).slice(-50);
-            }
-        }
-    } catch (error) {
-        conversation = [];
-    }
-}
-
-
-/* ---------- 6. GENERAL HELPERS ---------- */
-
-function normalizeText(text) {
-    return String(text || "")
-        .toLowerCase()
-        .replace(/[^\w\s-]/g, " ")
-        .replace(/\s+/g, " ")
-        .trim();
-}
-
-
-function escapeHTML(text) {
-    return String(text)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-}
-
-
-function formatMessage(text) {
-    /*
-     * All user-supplied text is escaped before rendering.
-     * Newlines and bullet points are formatted safely.
-     */
-
-    return escapeHTML(text)
-        .replace(/\n/g, "<br>")
-        .replace(
-            /(https:\/\/[^\s<]+)/g,
-            '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
-        );
-}
-
-
-function getCurrentTime() {
-    return new Date().toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit"
-    });
-}
-
-
-function saveConversation() {
-    if (!CONFIG.enableSessionHistory) return;
-
-    try {
-        sessionStorage.setItem(
-            "nspclVendorMitraHistory",
-            JSON.stringify(conversation.slice(-50))
-        );
-    } catch (error) {
-        // The chatbot continues to work if storage is unavailable.
-    }
-}
-
-
-function scrollToLatestMessage() {
-    if (chatMessages) {
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-}
-
-
-/* ---------- 7. RENDER A CHAT MESSAGE ---------- */
-
-function addMessage(role, text, options = {}) {
-    if (!chatMessages) return;
-
-    const message = {
-        role: role,
-        text: String(text),
-        time: getCurrentTime()
-    };
-
-    if (!options.skipSave) {
-        conversation.push(message);
-        conversation = conversation.slice(-50);
-        saveConversation();
-    }
-
-    const messageElement = document.createElement("div");
-
-    messageElement.className = "message " + role;
-
-    const avatar = document.createElement("div");
-    avatar.className = "message-avatar";
-    avatar.textContent = role === "bot" ? "V" : "Y";
-    avatar.setAttribute("aria-hidden", "true");
-
-    const content = document.createElement("div");
-    content.className = "message-content";
-
-    const messageText = document.createElement("div");
-    messageText.innerHTML = formatMessage(text);
-
-    const time = document.createElement("span");
-    time.className = "message-time";
-    time.textContent = message.time;
-
-    content.appendChild(messageText);
-    content.appendChild(time);
-
-    messageElement.appendChild(avatar);
-    messageElement.appendChild(content);
-
-    chatMessages.appendChild(messageElement);
-
-    scrollToLatestMessage();
-}
-
-
-/* ---------- 8. RESTORE CHAT HISTORY ---------- */
-
-function restoreConversation() {
-    if (!chatMessages) return;
-
-    chatMessages.innerHTML = "";
-
-    if (conversation.length === 0) {
-        showWelcomeMessage();
-        return;
-    }
-
-    conversation.forEach(function (message) {
-        addMessage(message.role, message.text, {
-            skipSave: true
-        });
-    });
-}
-
-
-/* ---------- 9. WELCOME MESSAGE ---------- */
-
-function showWelcomeMessage() {
-    addMessage(
-        "bot",
-        "Namaste! Welcome to NSPCL Vendor Mitra.\n\n" +
-        "I can help you find general information about vendor registration, " +
-        "tenders, GeM, bid submission, purchase orders, invoices and other " +
-        "procurement-related topics.\n\n" +
-        "How may I assist you today?"
+  if (!chatMessages) {
+    console.error(
+      "NSPCL Vendor Mitra: #chatMessages was not found. Check index.html."
     );
-}
+    return;
+  }
 
+  if (chatForm) {
+    chatForm.addEventListener("submit", function (event) {
+      event.preventDefault();
 
-/* ---------- 10. TYPING INDICATOR ---------- */
+      if (chatInput) {
+        sendMessage(chatInput.value);
+      }
+    });
+  }
 
-function showTypingIndicator() {
-    if (!chatMessages) return;
+  if (clearChatButton) {
+    clearChatButton.addEventListener("click", clearChat);
+  }
 
+  renderQuickQuestions();
+  renderFAQs();
+  restoreChatHistory();
+  scrollChatToBottom();
+});
+
+/* -------------------- SEND A MESSAGE -------------------- */
+
+function sendMessage(message) {
+  const question = String(message || "").trim();
+
+  if (!question || isReplying) {
+    return;
+  }
+
+  if (!chatMessages) {
+    chatMessages = document.getElementById("chatMessages");
+  }
+
+  if (!chatMessages) {
+    console.error("Chat messages container is missing.");
+    return;
+  }
+
+  if (chatInput) {
+    chatInput.value = "";
+  }
+
+  addMessage(question, "user");
+  saveMessage(question, "user");
+
+  isReplying = true;
+
+  if (sendButton) {
+    sendButton.disabled = true;
+  }
+
+  showTypingIndicator();
+
+  // A short delay makes the interaction feel conversational.
+  window.setTimeout(function () {
     removeTypingIndicator();
 
-    const typingMessage = document.createElement("div");
+    const response = getBotResponse(question);
 
-    typingMessage.className = "message bot";
-    typingMessage.id = "typingIndicator";
+    addMessage(response, "bot");
+    saveMessage(response, "bot");
 
-    const avatar = document.createElement("div");
-    avatar.className = "message-avatar";
-    avatar.textContent = "V";
+    isReplying = false;
 
-    const indicator = document.createElement("div");
-    indicator.className = "typing-indicator";
-    indicator.setAttribute("aria-label", "Vendor Mitra is typing");
-
-    for (let i = 0; i < 3; i++) {
-        indicator.appendChild(document.createElement("span"));
+    if (sendButton) {
+      sendButton.disabled = false;
     }
-
-    typingMessage.appendChild(avatar);
-    typingMessage.appendChild(indicator);
-
-    chatMessages.appendChild(typingMessage);
-
-    scrollToLatestMessage();
-}
-
-
-function removeTypingIndicator() {
-    const indicator = document.getElementById("typingIndicator");
-
-    if (indicator) {
-        indicator.remove();
-    }
-}
-
-
-/* ---------- 11. MATCH QUESTIONS TO FAQS ---------- */
-
-function findBestFAQ(userText) {
-    const input = normalizeText(userText);
-
-    if (!input) return null;
-
-    let bestMatch = null;
-    let highestScore = 0;
-
-    FAQS.forEach(function (faq) {
-        let score = 0;
-
-        faq.keywords.forEach(function (keyword) {
-            const normalizedKeyword = normalizeText(keyword);
-
-            if (input === normalizedKeyword) {
-                score += 12;
-            } else if (
-                input.includes(normalizedKeyword)
-            ) {
-                score += normalizedKeyword.split(" ").length > 1 ? 7 : 3;
-            } else if (
-                normalizedKeyword.includes(input) &&
-                input.length >= 5
-            ) {
-                score += 2;
-            }
-        });
-
-        const questionWords = normalizeText(faq.question)
-            .split(" ")
-            .filter(function (word) {
-                return word.length > 3;
-            });
-
-        questionWords.forEach(function (word) {
-            if (input.split(" ").includes(word)) {
-                score += 1;
-            }
-        });
-
-        if (score > highestScore) {
-            highestScore = score;
-            bestMatch = faq;
-        }
-    });
-
-    /*
-     * Require a reasonable match to avoid misleading answers.
-     */
-
-    return highestScore >= 3 ? bestMatch : null;
-}
-
-
-/* ---------- 12. GREETINGS AND GENERAL INTENTS ---------- */
-
-function getSpecialResponse(userText) {
-    const input = normalizeText(userText);
-
-    const greetings = [
-        "hi",
-        "hello",
-        "hey",
-        "namaste",
-        "good morning",
-        "good afternoon",
-        "good evening"
-    ];
-
-    if (
-        greetings.some(function (greeting) {
-            return input === greeting ||
-                input.startsWith(greeting + " ");
-        })
-    ) {
-        return (
-            "Hello! Welcome to NSPCL Vendor Mitra.\n\n" +
-            "I can assist with general vendor registration, tender procedures, " +
-            "GeM, bid documents, purchase orders and invoice enquiries.\n\n" +
-            "What would you like to know?"
-        );
-    }
-
-    if (
-        input === "thanks" ||
-        input === "thank you" ||
-        input.includes("thank you very much")
-    ) {
-        return (
-            "You're welcome! I'm happy to help.\n\n" +
-            "Feel free to ask another vendor-support question."
-        );
-    }
-
-    if (
-        input === "bye" ||
-        input === "goodbye" ||
-        input === "see you"
-    ) {
-        return (
-            "Thank you for using NSPCL Vendor Mitra.\n\n" +
-            "For official procurement information, please consult " +
-            "the relevant NSPCL tender documents and official website."
-        );
-    }
-
-    if (
-        input.includes("your name") ||
-        input.includes("who are you") ||
-        input.includes("what are you")
-    ) {
-        return (
-            "I'm NSPCL Vendor Mitra, a basic vendor-support FAQ chatbot. " +
-            "I provide general guidance on procurement-related topics, " +
-            "but I do not access live NSPCL systems."
-        );
-    }
-
-    if (
-        input.includes("live status") ||
-        input.includes("real time status") ||
-        input.includes("track my payment") ||
-        input.includes("track my invoice")
-    ) {
-        return (
-            "I cannot retrieve live invoice, payment or tender status.\n\n" +
-            "Please use the relevant official portal or contact the " +
-            "authorized NSPCL department with your reference details. " +
-            "Do not share confidential financial information here."
-        );
-    }
-
-    return null;
-}
-
-
-/* ---------- 13. BUILD THE BOT RESPONSE ---------- */
-
-function getBotResponse(userText) {
-    const specialResponse = getSpecialResponse(userText);
-
-    if (specialResponse) {
-        return specialResponse;
-    }
-
-    const faq = findBestFAQ(userText);
-
-    if (faq) {
-        return faq.answer;
-    }
-
-    return (
-        "I'm sorry, I couldn't find a sufficiently relevant answer " +
-        "in my current FAQ knowledge base.\n\n" +
-        "You could try asking about:\n\n" +
-        "• Vendor registration\n" +
-        "• GeM registration\n" +
-        "• NSPCL tenders and corrigenda\n" +
-        "• Bid submission and required documents\n" +
-        "• EMD and Performance Security\n" +
-        "• Purchase Orders\n" +
-        "• Invoice and payment enquiries\n" +
-        "• Delivery extensions\n\n" +
-        "For an official clarification, please consult " +
-        "https://www.nspcl.co.in/ or the contact identified " +
-        "in the relevant tender or contract."
-    );
-}
-
-
-/* ---------- 14. SEND A MESSAGE ---------- */
-
-function sendMessage(text) {
-    const userText = String(
-        text !== undefined
-            ? text
-            : (chatInput ? chatInput.value : "")
-    ).trim();
-
-    if (!userText || isBotTyping) return;
-
-    if (userText.length > CONFIG.maxMessageLength) {
-        addMessage(
-            "bot",
-            "Your message is too long. Please keep it within " +
-            CONFIG.maxMessageLength + " characters."
-        );
-        return;
-    }
-
-    addMessage("user", userText);
 
     if (chatInput) {
-        chatInput.value = "";
-        chatInput.focus();
+      chatInput.focus();
     }
-
-    isBotTyping = true;
-
-    if (sendButton) {
-        sendButton.disabled = true;
-    }
-
-    showTypingIndicator();
-
-    const response = getBotResponse(userText);
-
-    window.setTimeout(function () {
-        removeTypingIndicator();
-
-        addMessage("bot", response);
-
-        isBotTyping = false;
-
-        if (sendButton) {
-            sendButton.disabled = false;
-        }
-
-        if (chatInput) {
-            chatInput.focus();
-        }
-    }, CONFIG.typingDelay);
+  }, 450);
 }
 
+/*
+ * Expose this function for quick-question buttons in index.html:
+ * onclick="window.vmAsk('What is EMD?')"
+ */
+window.sendMessage = sendMessage;
 
-/* ---------- 15. QUICK QUESTION BUTTONS ---------- */
+window.vmAsk = function (question) {
+  sendMessage(question);
+};
 
-function renderQuickQuestions() {
-    if (!quickQuestionsContainer) return;
+/* -------------------- FIND THE BEST ANSWER -------------------- */
 
-    quickQuestionsContainer.innerHTML = "";
-
-    QUICK_QUESTIONS.forEach(function (question) {
-        const button = document.createElement("button");
-
-        button.type = "button";
-        button.className = "quick-question";
-        button.textContent = question;
-
-        button.addEventListener("click", function () {
-            sendMessage(question);
-        });
-
-        quickQuestionsContainer.appendChild(button);
-    });
+function normalizeText(text) {
+  return String(text || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
+function getBotResponse(question) {
+  const normalizedQuestion = normalizeText(question);
 
-/* ---------- 16. RENDER SEARCHABLE FAQ LIST ---------- */
+  if (!normalizedQuestion) {
+    return "Please type your question so I can help.";
+  }
 
-function renderFAQList() {
-    if (!faqContainer) return;
+  if (
+    /^(hi|hello|hey|good morning|good afternoon|good evening|namaste)$/.test(
+      normalizedQuestion
+    )
+  ) {
+    return "Hello! Welcome to NSPCL Vendor Mitra. 👋\n\nI can help with common questions about vendor registration, tenders, EMD, GeM, purchase orders, invoices, and delivery requirements.\n\nWhat would you like to know?";
+  }
 
-    faqContainer.innerHTML = "";
+  if (
+    normalizedQuestion.includes("thank you") ||
+    normalizedQuestion === "thanks" ||
+    normalizedQuestion === "thank you"
+  ) {
+    return "You're welcome! 😊 If you have another vendor-related question, feel free to ask.";
+  }
 
-    FAQS.forEach(function (faq, index) {
-        const item = document.createElement("div");
-        item.className = "faq-item";
+  if (
+    normalizedQuestion.includes("human") ||
+    normalizedQuestion.includes("real person") ||
+    normalizedQuestion.includes("speak to someone")
+  ) {
+    return "For assistance from an NSPCL representative, please use the official contact details in your tender document, purchase order, or on the relevant official website. This chatbot cannot transfer your chat to an officer.";
+  }
 
-        const questionButton = document.createElement("button");
-        questionButton.type = "button";
-        questionButton.className = "faq-question";
-        questionButton.setAttribute("aria-expanded", "false");
-        questionButton.setAttribute(
-            "aria-controls",
-            "faq-answer-" + index
-        );
+  if (
+    normalizedQuestion.includes("who are you") ||
+    normalizedQuestion.includes("your name") ||
+    normalizedQuestion.includes("what can you do")
+  ) {
+    return "I am NSPCL Vendor Mitra, a rule-based vendor-support chatbot prototype. I can answer common questions about procurement procedures, tenders, EMD, GeM, invoices, and purchase orders. I cannot access confidential company systems or live vendor records.";
+  }
 
-        const questionText = document.createElement("span");
-        questionText.textContent = faq.question;
+  if (
+    normalizedQuestion.includes("urgent") ||
+    normalizedQuestion.includes("deadline today")
+  ) {
+    return "If your issue concerns an imminent tender deadline or contractual deadline, contact the official procurement portal helpdesk or the authorised NSPCL contact immediately. Follow the deadline and instructions in the applicable tender or contract.";
+  }
 
-        const arrow = document.createElement("span");
-        arrow.textContent = "+";
-        arrow.setAttribute("aria-hidden", "true");
+  let bestMatch = null;
+  let bestScore = 0;
 
-        questionButton.appendChild(questionText);
-        questionButton.appendChild(arrow);
+  for (const faq of vendorFAQs) {
+    let score = 0;
 
-        const answer = document.createElement("div");
-        answer.className = "faq-answer";
-        answer.id = "faq-answer-" + index;
-        answer.hidden = true;
-        answer.textContent = faq.answer;
+    const normalizedFAQQuestion = normalizeText(faq.question);
 
-        questionButton.addEventListener("click", function () {
-            const willOpen = answer.hidden;
-
-            answer.hidden = !willOpen;
-
-            questionButton.setAttribute(
-                "aria-expanded",
-                String(willOpen)
-            );
-
-            arrow.textContent = willOpen ? "−" : "+";
-        });
-
-        item.appendChild(questionButton);
-        item.appendChild(answer);
-
-        faqContainer.appendChild(item);
-    });
-}
-
-
-/* ---------- 17. CLEAR CHAT ---------- */
-
-function clearChat() {
-    conversation = [];
-
-    try {
-        sessionStorage.removeItem("nspclVendorMitraHistory");
-    } catch (error) {
-        // Continue even if session storage is unavailable.
+    // Exact question or close match receives a higher score.
+    if (normalizedQuestion === normalizedFAQQuestion) {
+      score += 100;
     }
-
-    if (chatMessages) {
-        chatMessages.innerHTML = "";
-    }
-
-    removeTypingIndicator();
-
-    isBotTyping = false;
-
-    if (sendButton) {
-        sendButton.disabled = false;
-    }
-
-    showWelcomeMessage();
-}
-
-
-function initializeClearChat() {
-    if (!clearChatButton) return;
-
-    clearChatButton.addEventListener("click", function () {
-        clearChat();
-    });
-}
-
-
-/* ---------- 18. FORM EVENTS ---------- */
-
-function initializeChatForm() {
-    if (chatForm) {
-        chatForm.addEventListener("submit", function (event) {
-            event.preventDefault();
-            sendMessage();
-        });
-    }
-
-    /*
-     * Supports pages where a send button exists without a form.
-     */
 
     if (
-        sendButton &&
-        (!chatForm || sendButton.form !== chatForm)
+      normalizedQuestion.includes(normalizedFAQQuestion) ||
+      normalizedFAQQuestion.includes(normalizedQuestion)
     ) {
-        sendButton.addEventListener("click", function (event) {
-            event.preventDefault();
-            sendMessage();
-        });
+      score += 10;
     }
 
-    /*
-     * Optional: Enter sends; Shift + Enter inserts a new line.
-     */
+    // Match relevant keywords.
+    for (const keyword of faq.keywords) {
+      const normalizedKeyword = normalizeText(keyword);
 
-    if (chatInput && chatInput.tagName === "TEXTAREA") {
-        chatInput.addEventListener("keydown", function (event) {
-            if (
-                event.key === "Enter" &&
-                !event.shiftKey &&
-                !event.isComposing
-            ) {
-                event.preventDefault();
-                sendMessage();
-            }
-        });
+      if (!normalizedKeyword) {
+        continue;
+      }
+
+      if (normalizedQuestion.includes(normalizedKeyword)) {
+        // Multiword matches tend to be more meaningful.
+        score += normalizedKeyword.includes(" ") ? 8 : 3;
+      }
     }
+
+    // Count shared meaningful words.
+    const questionWords = normalizedQuestion
+      .split(" ")
+      .filter(function (word) {
+        return word.length > 2;
+      });
+
+    const faqWords = normalizedFAQQuestion.split(" ");
+
+    for (const word of questionWords) {
+      if (faqWords.includes(word)) {
+        score += 2;
+      }
+    }
+
+    if (score > bestScore) {
+      bestScore = score;
+      bestMatch = faq;
+    }
+  }
+
+  if (bestMatch && bestScore >= 3) {
+    return bestMatch.answer;
+  }
+
+  return (
+    "I'm sorry, I couldn't find a reliable answer to that question in my current FAQ library.\n\n" +
+    "You can try asking about:\n" +
+    "• Vendor registration\n" +
+    "• Tenders and bid submission\n" +
+    "• EMD and performance security\n" +
+    "• GeM and MSME\n" +
+    "• Purchase orders and invoices\n" +
+    "• Payment enquiries\n" +
+    "• Delivery extensions\n\n" +
+    "For official confirmation, please refer to the applicable tender, purchase order, or authorised NSPCL contact."
+  );
 }
 
+/* -------------------- DISPLAY CHAT MESSAGES -------------------- */
 
-/* ---------- 19. INITIALIZE THE CHATBOT ---------- */
+function addMessage(text, sender) {
+  if (!chatMessages) {
+    return;
+  }
 
-function initializeVendorMitra() {
-    initializeChatForm();
-    initializeClearChat();
-    renderQuickQuestions();
-    renderFAQList();
-    restoreConversation();
+  const messageElement = document.createElement("div");
 
-    console.log(
-        CONFIG.botName + " initialized successfully."
+  messageElement.className =
+    sender === "user"
+      ? "message user-message"
+      : "message bot-message";
+
+  // Also provide general classes for compatibility with alternate CSS.
+  messageElement.classList.add(sender === "user" ? "user" : "bot");
+
+  const bubble = document.createElement("div");
+  bubble.className = "message-bubble";
+
+  // Use textContent so user input is displayed safely, not as HTML.
+  // Preserve line breaks in the message.
+  bubble.textContent = text;
+
+  const time = document.createElement("div");
+  time.className = "message-time";
+  time.textContent = new Date().toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+
+  messageElement.appendChild(bubble);
+  messageElement.appendChild(time);
+
+  chatMessages.appendChild(messageElement);
+  scrollChatToBottom();
+}
+
+function scrollChatToBottom() {
+  if (chatMessages) {
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+}
+
+/* -------------------- TYPING INDICATOR -------------------- */
+
+function showTypingIndicator() {
+  if (!chatMessages || document.getElementById("vmTypingIndicator")) {
+    return;
+  }
+
+  const indicator = document.createElement("div");
+  indicator.id = "vmTypingIndicator";
+  indicator.className = "message bot-message typing-message";
+  indicator.setAttribute("aria-label", "Vendor Mitra is preparing a reply");
+
+  const bubble = document.createElement("div");
+  bubble.className = "message-bubble typing-bubble";
+  bubble.textContent = "Vendor Mitra is typing...";
+
+  indicator.appendChild(bubble);
+  chatMessages.appendChild(indicator);
+
+  scrollChatToBottom();
+}
+
+function removeTypingIndicator() {
+  const indicator = document.getElementById("vmTypingIndicator");
+
+  if (indicator) {
+    indicator.remove();
+  }
+}
+
+/* -------------------- CHAT HISTORY -------------------- */
+
+const CHAT_STORAGE_KEY = "nspclVendorMitraChat_v1";
+
+function saveMessage(text, sender) {
+  try {
+    const history = JSON.parse(
+      sessionStorage.getItem(CHAT_STORAGE_KEY) || "[]"
     );
-}
 
+    history.push({
+      text: text,
+      sender: sender,
+      time: Date.now()
+    });
 
-/* ---------- 20. START WHEN HTML IS READY ---------- */
-
-if (document.readyState === "loading") {
-    document.addEventListener(
-        "DOMContentLoaded",
-        initializeVendorMitra
+    // Keep the latest 100 messages.
+    sessionStorage.setItem(
+      CHAT_STORAGE_KEY,
+      JSON.stringify(history.slice(-100))
     );
-} else {
-    initializeVendorMitra();
+  } catch (error) {
+    // Chat functionality continues even if storage is unavailable.
+    console.warn("Chat history could not be saved.", error);
+  }
 }
 
+function restoreChatHistory() {
+  if (!chatMessages) {
+    return;
+  }
+
+  try {
+    const history = JSON.parse(
+      sessionStorage.getItem(CHAT_STORAGE_KEY) || "[]"
+    );
+
+    if (!Array.isArray(history) || history.length === 0) {
+      return;
+    }
+
+    // Remove the static welcome bubble only when restoring saved history.
+    chatMessages.replaceChildren();
+
+    history.forEach(function (item) {
+      if (
+        item &&
+        typeof item.text === "string" &&
+        (item.sender === "user" || item.sender === "bot")
+      ) {
+        addMessage(item.text, item.sender);
+      }
+    });
+  } catch (error) {
+    console.warn("Chat history could not be restored.", error);
+  }
+}
+
+function clearChat() {
+  if (!chatMessages) {
+    chatMessages = document.getElementById("chatMessages");
+  }
+
+  if (chatMessages) {
+    chatMessages.replaceChildren();
+
+    // Restore a fresh welcome message.
+    addMessage(
+      "Hello! 👋 Welcome to NSPCL Vendor Mitra.\n\nI'm here to help with common vendor queries about registration, tenders, GeM, EMD, purchase orders, invoices, and delivery requirements.\n\nPlease select a quick question or type your query below.",
+      "bot"
+    );
+  }
+
+  try {
+    sessionStorage.removeItem(CHAT_STORAGE_KEY);
+  } catch (error) {
+    console.warn("Chat history could not be cleared.", error);
+  }
+
+  isReplying = false;
+
+  if (sendButton) {
+    sendButton.disabled = false;
+  }
+
+  if (chatInput) {
+    chatInput.value = "";
+    chatInput.focus();
+  }
+}
+
+/* -------------------- QUICK-QUESTION BUTTONS -------------------- */
+
+function renderQuickQuestions() {
+  if (!quickQuestionsContainer) {
+    return;
+  }
+
+  quickQuestionsContainer.replaceChildren();
+
+  const list = document.createElement("div");
+  list.className = "quick-question-list";
+
+  quickQuestionTexts.forEach(function (question) {
+    const button = document.createElement("button");
+
+    button.type = "button";
+    button.className = "quick-question";
+    button.textContent = question;
+
+    button.addEventListener("click", function () {
+      sendMessage(question);
+    });
+
+    list.appendChild(button);
+  });
+
+  quickQuestionsContainer.appendChild(list);
+}
+
+/* -------------------- FAQ SECTION -------------------- */
+
+function renderFAQs() {
+  if (!faqListContainer) {
+    return;
+  }
+
+  faqListContainer.replaceChildren();
+
+  vendorFAQs.slice(0, 12).forEach(function (faq, index) {
+    const item = document.createElement("div");
+    item.className = "faq-item";
+
+    const questionButton = document.createElement("button");
+    questionButton.type = "button";
+    questionButton.className = "faq-question";
+    questionButton.textContent = faq.question;
+    questionButton.setAttribute("aria-expanded", "false");
+    questionButton.setAttribute("aria-controls", "vmFaqAnswer" + index);
+
+    const answer = document.createElement("div");
+    answer.className = "faq-answer";
+    answer.id = "vmFaqAnswer" + index;
+    answer.textContent = faq.answer;
+    answer.hidden = true;
+
+    questionButton.addEventListener("click", function () {
+      const isExpanded =
+        questionButton.getAttribute("aria-expanded") === "true";
+
+      questionButton.setAttribute(
+        "aria-expanded",
+        String(!isExpanded)
+      );
+
+      answer.hidden = isExpanded;
+
+      if (!isExpanded) {
+        // Let the user ask the same FAQ directly in the chat.
+        answer.setAttribute("tabindex", "-1");
+      }
+    });
+
+    item.appendChild(questionButton);
+    item.appendChild(answer);
+
+    faqListContainer.appendChild(item);
+  });
+}
+
+/* -------------------- OPTIONAL PUBLIC HELPERS -------------------- */
+
+// Other HTML controls may use these functions if needed.
+window.vmClearChat = clearChat;
+window.vmGetBotResponse = getBotResponse;
